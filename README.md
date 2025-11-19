@@ -1,227 +1,197 @@
-# ✨ EnhancedPets — Enhanced Pet System ✨
+# ✨ 增强宠物 — 增强宠物系统 ✨
 
 ![Version](https://img.shields.io/badge/Version-v1.1.0-blue.svg)
 ![Compatibility](https://img.shields.io/badge/MC%20Version-1.17%E2%80%941.21.x-orange.svg)
 ![Java](https://img.shields.io/badge/Java-17%2B-RED)
 ![Discord Support](https://img.shields.io/discord/b7BVkJ56mR?label=Discord&logo=discord&color=7289DA)
 
-> Enhance the vanilla pet experience now without mental gymnastics!\
-> Wolves, cats, parrots, and more — but smarter, friendlier, and easier to manage.
+> 无需复杂操作即可提升原版宠物体验！
+> 更智能、更友好、更易管理的狼、猫、鹦鹉等宠物。
 
-Thanks to:
+鸣谢 (Thanks to):
 - cystol
 - AxoIsAxo
-
+- Nils Gereke
+- All contributor who working in origin code.
 ---
 
-## 📚 Overview
+## 📚 概述
+EnhancedPets让原版宠物真正实用且易于管理。玩家获得简洁GUI、快捷操作和批量工具；管理员获得简易配置、自动保存和稳定存储。
 
-EnhancedPets makes vanilla pets actually useful and pleasant to manage. Players get a clean GUI, quick actions, and batch tools; admins get simple config, autosaving, and resilient storage.
-
-- Player-friendly: intuitive menus, shift-double right-click to open pet GUI, safe confirmations
-- Admin-friendly: flat JSON storage per player, autosave, quick config reload, migration from legacy config
-- Devs who keep uttering bad jokes periodically at your service (Use the Issues section)
-
----
-
-## 💡 Feature Highlights
-
-- 💎 Pet Modes
-    - Passive, Neutral, Aggressive — switch instantly from the GUI
-    - AKA ‘we vibe’, ‘default’, and ‘try me.
-- 🧭 Teleport & Calm
-    - Summon any pet to you
-    - clear targets/anger with a click
-- 🏷️ Rename (with validation)
-    - Rename via chat (A–Z, 0–9, _ and -), or reset to a clean default if invalid
-    - Bypassing nametag requirements since 2025
-- ⭐ Favorites
-    - Pin pets you care about — favorites bubble to the top
-    - *You should use this on all your pets lest you a monster*
-- 🪑 Sit / Stand
-    - Toggle sitting for sittable pets (wolves, cats)
-    - More micromanagement for our dear users
-- 🌱 Baby Growth Control
-    - Pause baby growth (per-pet and batch); protected by a guard task
-- 👥 Friendly Players (Whitelist)
-    - Add players your pet should never attack; manage per-pet or in batch
-    - Apes together stronk
-- 🤝 Mutual Non-Aggression
-  - Upon enabling this, pets won't attack players (even in aggressive mode)
-  - In return players cant hurt said pets (Through direct attacks)
-  - peace treaty goes hard! use this feature irresponsibly... unless dog army
-- 🎨 **Pet Display Customization (NEW!)**
-  - **Custom Icons:** Set any item in your hand as your pet's display icon in the GUI! (Shift-click to reset).
-  - **Name Colors:** Pick a unique `ChatColor` for each pet's display name in the GUI! (Shift-click to reset).
-- 🧺 Batch Actions
-    - Select a type (e.g., Wolves) → pick pets → do things at scale:
-    - Set modes, toggle favorites, sit/stand, teleport, calm, manage friendlies, transfer, or free
-- 🪦 Dead Pet Flow
-    - When a pet dies, it stays in the GUI as a skeleton skull
-    - Revive with a Nether Star (metadata restoration like collar color, variants, health, etc.), or delete permanently
-- 🧭 Scan & Sync
-    - Button to scan loaded chunks for your previously unmanaged tamed pets and add them
-- 💾 Robust Storage
-    - Per-player JSON files; automatic autosave (every 2 minutes); one-time migration from legacy config.yml
-- 🔁 Reload Safe
-    - /pets reload updates config and transparently restarts internal tasks
-- 🐙 Happy Ghast (1.21.6)
-    - If your server is 1.21.6+:
-        - Right-click with a Snowball to tame (20% chance each try)
-        - Manage via the same GUI and batch tools
-        - Ride it and left-click to shoot a fireball (cooldown)
-        - Dont torture your Happy Ghasts Kids
-
-Note on Aggressive mode: Pets in Aggressive mode proactively look for nearby valid targets they can see and that aren’t friendly or owned by you. This is not limited to “hostiles only.”\
-Note on other stuff: Passive Aggressive mode is in the works and will be released if you dont fix your lifestyle
----
-
-## 🖼️ Screens & UX
-Everything beautifully designed to match aesthetic and usability (Real)
-
-- Main menu shows all your pets, sorted by favorites → type → name/ID
-- Per-pet management screen with quick actions and safety confirmations
-- Batch menus for type selection, pet selection, and mass-management
-
-(Images coming soon!) (Maybe GIFs)
+- 玩家友好：直观菜单，Shift+双击右键打开宠物GUI，安全确认
+- 管理便捷：按玩家分列JSON存储，自动保存，快速重载配置，旧版配置迁移
+- 开发人员持续为您提供周期性冷笑话服务（请使用问题反馈区）
 
 ---
+## 💡 核心功能
+💎 宠物模式
+被动、中立、攻击性——可从GUI即时切换
+又名"岁月静好"、"默认模式"和"你过来啊"
 
-## ⚙️ Installation
+🧭 传送与安抚
+召唤任意宠物至身边
+一键清除目标/仇恨值
 
-Prebuilt releases
-1. Download the latest enhancedpets.jar
-2. Drop it into plugins/
-3. Restart your server
+🏷️ 重命名（含验证）
+通过聊天框重命名（限A-Z,0-9,_和-），或重置为默认名称
+自2025年起免除命名牌要求
 
-Build from source (Maven)
-1. git clone https://github.com/AxoIsAxo/EnhancedPets.git
-2. cd EnhancedPets
-3. mvn clean install
-4. Copy target/enhancedpets-xxx.jar to plugins/
-5. Restart your server
+⭐ 收藏功能
+标记重要宠物——收藏项置顶显示
+所有宠物都应该标记，否则阁下未免冷酷
 
-Requirements
-- Java 17+
-- Spigot/Paper 1.17–1.21.x (some new features—like wolf variants—are best on 1.21+)
+🪑 坐/站指令
+切换可坐宠物状态（狼、猫）
+为用户精心设计的微操功能
 
----
+🌱 幼崽成长控制
+暂停幼崽成长（单宠/批量）；受保护任务监管
 
-## ⌨️ Commands & Permissions
+👥 友善玩家（白名单）
+添加宠物永不攻击的玩家；支持单宠或批量管理
+团结就是力量
 
-Commands
-- /pets — opens the Pets GUI
-- /pets reload — reloads the plugin configuration
+🤝 互不侵犯条约
+启用后宠物不会攻击玩家（即使处于攻击模式）
+相应玩家也无法伤害该宠物（通过直接攻击）
+和平诚可贵！请慎重使用该功能...除非要组建狗狗军团（发来！）
 
-Permissions
-- enhancedpets.use — use /pets and the GUI (default: true)
-- enhancedpets.reload — allow /pets reload (default: op)
-- enhancedpets.admin — reserved for future admin features (default: op)
+🎨 宠物显示自定义（新功能！）
+自定义图标： 将手中物品设为GUI中宠物显示图标！（Shift+单击重置）
+名称颜色： 为每只宠物选择独特的ChatColor显示名称！（Shift+单击重置）
 
-Quick Tip
-- Shift + double right-click your own tamed pet to open its GUI instantly (configurable)
+🧺 批量操作
+选择类型（如狼）→勾选宠物→批量执行：
+设置模式、收藏开关、坐/站、传送、安抚、管理友方、转移或释放
 
----
+🪦 死亡宠物流程
+宠物死亡后以骷髅头形式保留在GUI中
+使用下界之星复活（恢复项包括项圈颜色、变种、生命值等元数据），或永久删除
 
-## 🛠️ Config
+🧭 扫描与同步
+扫描已加载区块，找回未被管理的已驯服宠物
 
-Default config.yml
+💾 快速存储
+按玩家分列JSON文件；每2分钟自动保存；支持从旧版config.yml一次性迁移
 
-```yml
-# Configuration for EnhancedPets
+🔁 安全重载
+/pets reload可更新配置并透明重启内部任务
 
-# Should cats actively attack any nearby hostile mob?
+🐙 快乐恶魂（1.21.6+）
+若服务器为1.21.6+：
+用雪球右击驯服（每次20%成功率）
+通过相同GUI和批量工具管理
+骑乘时左键发射火球（有冷却）
+请勿虐待您的快乐恶魂
+攻击模式须知：处于攻击模式的宠物会主动寻找可视范围内非友善且非你所有的有效目标，不仅限于"敌对生物"。
+其他注意事项：被动攻击模式正在开发中。
+
+🖼️ 界面与体验
+精心设计兼顾美学与实用性（真实不虚）
+
+主菜单按收藏→类型→名称/ID排序显示所有宠物
+单体管理界面含快捷操作与安全确认
+批量菜单支持类型筛选、宠物勾选和群组管理
+（图片即将上线！）（或许还有GIF）
+
+⚙️ 安装指南
+预构建版本
+
+下载最新enhancedpets.jar
+放入plugins/文件夹
+重启服务器
+源码构建（Maven）
+
+git clone https://github.com/AxoIsAxo/EnhancedPets.git
+cd EnhancedPets
+mvn clean install
+复制target/enhancedpets-xxx.jar到plugins/
+重启服务器
+
+需求:
+Java 17+
+Spigot/Paper 1.17–1.21.x（部分新功能如狼变种需1.21+）
+
+## ⌨️ 指令与权限
+指令
+
+/pets —— 打开宠物GUI
+
+/pets reload —— 重载插件配置
+
+
+权限
+
+enhancedpets.use —— 使用/pets和GUI（默认：true）
+
+enhancedpets.reload —— 允许/pets reload（默认：op）
+
+enhancedpets.admin —— 预留管理功能（默认：op）
+
+快捷操作
+Shift+双击右键已驯服宠物可立即打开其GUI（可配置）
+
+🛠️ 配置
+默认config.yml
+
+```YML
+
+# EnhancedPets配置
+
+# 猫是否主动攻击附近敌对生物？
 cats-attack-hostiles: false
 
-# How should dogs react to creepers?
-# NEUTRAL: Vanilla behavior (ignore unless owner is attacked by creeper).
-# ATTACK: Dogs will actively target and attack creepers.
-# FLEE: Dogs will try to run away from nearby creepers and won't attack them.
-dog-creeper-behavior: NEUTRAL # Can be NEUTRAL, ATTACK, or FLEE
+# 狗对苦力怕的反应？
+# NEUTRAL: 原版行为（无视除非主人被苦力怕攻击）
+# ATTACK: 狗会主动攻击苦力怕
+# FLEE: 狗会逃离附近苦力怕且不攻击
+dog-creeper-behavior: NEUTRAL # 可选NEUTRAL, ATTACK, FLEE
 
-# Re-enable pre-1.14 Ocelot taming?
-# If true, right-clicking an untamed adult Ocelot with raw Cod or Salmon
-# will consume the fish and transform the Ocelot into a tamed Cat.
-ocelot-taming-legacy-style: false # Default to false to maintain vanilla behavior
+# 是否启用1.14前豹猫驯服机制？
+# 若开启，用生鳕鱼/鲑鱼右击未驯服成年豹猫可转化为家猫
+ocelot-taming-legacy-style: false # 默认false保持原版特性
 
-# NEW: Shift double right-click any pet you own to open its GUI?
-# If true, right-clicking within a window of 250ms on your OWN pet will open the GUI/
+# 新增：Shift+双击右键打开所属宠物GUI？
+# 若开启，250毫秒内双击自己宠物可打开GUI
 shift-doubleclick-pet-gui: true
 
-# Allow players riding the custom "Happy Ghast" pet to shoot fireballs?
-# If true, players can left-click while riding their ghast to shoot a small fireball.
+# 是否允许骑乘"欢乐幽灵"发射火球？
+# 若开启，骑乘时左键可发射小火球
 happy-ghast-fireball: true
 
-#Require advanced logs? want to check if there's a bug?
-#Enable this to receive tons of helpful messages from the plugin in the server console
+# 需要高级日志？排查bug？
+# 开启后控制台将输出详细插件信息
 debug: false
 
-#END OF CONFIGURATION
+#配置结束
 ```
+备注
 
-Notes
-- /pets reload reloads configuration (pet data is stored in JSON and not reloaded)
-- On enable, the plugin will migrate any old inline “pet-data” from config.yml into playerdata/*.json (one-time)
+/pets reload只重载配置（宠物数据存储在JSON中不受影响）
+启用时会自动迁移旧版config.yml中的"pet-data"到playerdata/*.json（一次性）
 
----
+🔍 数据与自动保存
+经严格测试确保数据只在无人察觉时丢失（玩笑，其实很可靠）
 
-## 🔍 Data & Autosave
-Meticulously Tested to ensure loss only where no one is looking (jk its pretty good)
+每位玩家的宠物数据存储在plugins/EnhancedPets/playerdata/<玩家UUID>.json
+自动保存每2分钟异步执行一次
+变更时也会按玩家进行同步保存（快速、安全、分组）
 
-- Each player’s pets are saved in plugins/EnhancedPets/playerdata/<player-uuid>.json
-- Autosave runs asynchronously every 2 minutes
-- Saves are also debounced per owner when changes happen (quick, safe, and grouped)
+🧪 复活时恢复哪些属性？
+当然是一切可见之物，宠物将以昔日荣光重现。
+当死亡宠物复活时，EnhancedPets会恢复所有可能项！：
 
----
+⚠️ 已知事项
+攻击模式会选择可视范围内非友善非你所有的有效目标，不限于怪物
+配置项"ocelot-taming-legacy-style"为未来扩展保留
 
-## 🧪 What gets restored on revive?
+🤝 支持
+疑问/建议/求助？加入Discord：https://discord.gg/b7BVkJ56mR （我们需要你！）
 
-Everything that can be seen of course, The pets are brought back to life in their prior glory.
-When a dead pet is revived, EnhancedPets restores everything it can!:
-
-<details>
-  <summary><b>Click at your own discretion: may cause questions about nature of existence and recreation leading to lack of authenticity</b></summary>
-
-- **Age and sitting state**
-- **Custom name + visibility**
-- **Health / max health**
-- **Wolf collar color + 1.21+ variant (via registry)**
-- **Cat type, collar color, lying down**
-- **Parrot variant**
-- **Major horse/llama traits (movement, color, strength, etc.)**
-
-Should you find an attribute you feel is yet to be etched in our restoration list, I humbly request you to let us know post-haste
-</details>
-
-
-
----
-
-## 🧠 Tips for Players
-
-- Use Favorites (★) to quickly pin your main companions to the TOP
-- Use Batch Actions to handle big stables in seconds
-- “Scan for My Pets” helps if you tamed animals before installing the plugin (Use every 10 seconds to prove OCD (medically certified))
-- Reviving costs a Nether Star — plan accordingly!
-
----
-
-## ⚠️ Known Notes
-
-- Aggressive mode picks “valid nearby” targets in line-of-sight that aren’t friendly or yours; it’s not restricted to monsters only
-- The config option “ocelot-taming-legacy-style” is reserved for future expansion
-
----
-
-## 🤝 Support
-
-- Questions, ideas, or need help? Join our Discord: https://discord.gg/b7BVkJ56mR (WE NEED YOU PEEPS)
-
----
-
-## 🙌 Credits
+🙌 致谢
 
 - Code & design: cystol, AxoIsAxo
 - Community feedback and testing: You 💙
 
-Bring your pets to life — slightly more effectively than vanilla.
+
+给生活增添宠物管理 — 比原版更可靠.

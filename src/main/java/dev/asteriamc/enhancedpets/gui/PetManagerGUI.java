@@ -117,20 +117,20 @@ public class PetManagerGUI {
             Inventory gui = Bukkit.createInventory(player, invSize, MAIN_MENU_TITLE);
 
             if (pets.isEmpty()) {
-                gui.setItem(13, this.createItem(Material.BARRIER, ChatColor.RED + "No Pets Found",
-                        Collections.singletonList(ChatColor.GRAY + "Tame some wolves or cats!")));
+                gui.setItem(13, this.createItem(Material.BARRIER, ChatColor.RED + "未找到宠物",
+                        Collections.singletonList(ChatColor.GRAY + "驯服一些狼或者猫！")));
             } else {
                 for (int i = 0; i < pets.size(); i++) {
                     gui.setItem(i, this.createPetItem(pets.get(i)));
                 }
 
                 if (effectiveOwner.equals(player.getUniqueId())) {
-                    gui.setItem(invSize - 8, createActionButton(Material.COMPASS, ChatColor.AQUA + "Scan for My Pets", "scan_for_pets", null,
-                            Arrays.asList(ChatColor.GRAY + "Scans loaded areas for your unregistered pets.", "", ChatColor.YELLOW + "Click to scan and sync.")));
+                    gui.setItem(invSize - 8, createActionButton(Material.COMPASS, ChatColor.AQUA + "扫描我拥有的宠物", "scan_for_pets", null,
+                            Arrays.asList(ChatColor.GRAY + "扫描已加载区域中您未注册的宠物。", "", ChatColor.YELLOW + "点击扫描并同步。")));
                 }
-                gui.setItem(invSize - 5, this.createItem(Material.PAPER, ChatColor.AQUA + "Page 1 / 1", Collections.singletonList(ChatColor.GRAY + "Total Pets: " + totalPets)));
-                gui.setItem(invSize - 2, createActionButton(Material.HOPPER, ChatColor.GOLD + "Batch Actions", "batch_actions", null,
-                        Collections.singletonList(ChatColor.GRAY + "Manage multiple pets at once.")));
+                gui.setItem(invSize - 5, this.createItem(Material.PAPER, ChatColor.AQUA + "页 1 / 1", Collections.singletonList(ChatColor.GRAY + "所有宠物: " + totalPets)));
+                gui.setItem(invSize - 2, createActionButton(Material.HOPPER, ChatColor.GOLD + "批量操作", "batch_actions", null,
+                        Collections.singletonList(ChatColor.GRAY + "批量管理宠物。")));
             }
             player.openInventory(gui);
         } else {
@@ -148,19 +148,19 @@ public class PetManagerGUI {
             }
 
             if (page > 0) {
-                gui.setItem(invSize - 9, this.createNavigationButton(Material.ARROW, ChatColor.GREEN + "Previous Page", "main_page", page - 1, null));
+			gui.setItem(invSize - 9, this.createNavigationButton(Material.ARROW, ChatColor.GREEN + "上一页", "main_page", page - 1, null));
             }
             if (endIndex < totalPets) {
-                gui.setItem(invSize - 1, this.createNavigationButton(Material.ARROW, ChatColor.GREEN + "Next Page", "main_page", page + 1, null));
+                gui.setItem(invSize - 1, this.createNavigationButton(Material.ARROW, ChatColor.GREEN + "下一页", "main_page", page + 1, null));
             }
             if (effectiveOwner.equals(player.getUniqueId())) {
-                gui.setItem(invSize - 8, createActionButton(Material.COMPASS, ChatColor.AQUA + "Scan for My Pets", "scan_for_pets", null,
-                        Arrays.asList(ChatColor.GRAY + "Scans loaded areas for your unregistered pets.", "", ChatColor.YELLOW + "Click to scan and sync.")));
+                gui.setItem(invSize - 8, createActionButton(Material.COMPASS, ChatColor.AQUA + "扫描我拥有的宠物", "scan_for_pets", null,
+                        Arrays.asList(ChatColor.GRAY + "扫描已加载区域中您未注册的宠物。", "", ChatColor.YELLOW + "点击扫描并同步。")));
             }
-            gui.setItem(invSize - 5, this.createItem(Material.PAPER, ChatColor.AQUA + "Page " + (page + 1) + " / " + totalPages,
-                    Collections.singletonList(ChatColor.GRAY + "Total Pets: " + totalPets)));
-            gui.setItem(invSize - 2, createActionButton(Material.HOPPER, ChatColor.GOLD + "Batch Actions", "batch_actions", null,
-                    Collections.singletonList(ChatColor.GRAY + "Manage multiple pets at once.")));
+            gui.setItem(invSize - 5, this.createItem(Material.PAPER, ChatColor.AQUA + "页 " + (page + 1) + " / " + totalPages,
+                    Collections.singletonList(ChatColor.GRAY + "所有宠物: " + totalPets)));
+            gui.setItem(invSize - 2, createActionButton(Material.HOPPER, ChatColor.GOLD + "批量操作", "batch_actions", null,
+                    Collections.singletonList(ChatColor.GRAY + "批量管理宠物。")));
 
             player.openInventory(gui);
         }
@@ -168,7 +168,7 @@ public class PetManagerGUI {
 
     public void openBatchManagementMenu(Player player, Set<UUID> selectedPetUUIDs) {
         if (selectedPetUUIDs == null || selectedPetUUIDs.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "You haven't selected any pets to manage.");
+            player.sendMessage(ChatColor.RED + "您尚未选择任何宠物进行管理操作。");
             this.openMainMenu(player);
             return;
         }
@@ -178,7 +178,7 @@ public class PetManagerGUI {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        String title = ChatColor.DARK_AQUA + "Batch Manage " + selectedPets.size() + " Pets";
+        String title = ChatColor.DARK_AQUA + "批量管理 " + selectedPets.size() + " 宠物";
         Inventory gui = Bukkit.createInventory(player, 54, title);
 
         long favoriteCount = selectedPets.stream().filter(PetData::isFavorite).count();
@@ -201,12 +201,12 @@ public class PetManagerGUI {
         PetData batchData = new PetData(null, player.getUniqueId(), null, "Batch");
         batchData.setMode(commonMode);
 
-        String favoriteDisplayName = (anyFavorites ? ChatColor.GOLD + "★ " : "") + ChatColor.YELLOW + ChatColor.BOLD + "Managing " + selectedPets.size() + " Pets";
+        String favoriteDisplayName = (anyFavorites ? ChatColor.GOLD + "★ " : "") + ChatColor.YELLOW + ChatColor.BOLD + "管理 " + selectedPets.size() + " 宠物";
         gui.setItem(4, this.createActionButton(Material.HOPPER, favoriteDisplayName, "batch_toggle_favorite", null,
                 Arrays.asList(
-                        ChatColor.GRAY + "Selected: " + ChatColor.WHITE + selectedPets.size() + " pets",
+                        ChatColor.GRAY + "已选择: " + ChatColor.WHITE + selectedPets.size() + " 宠物",
                         "",
-                        allFavorites ? ChatColor.YELLOW + "Click to remove all from favorites" : ChatColor.GREEN + "Click to mark all as favorite"
+                        allFavorites ? ChatColor.YELLOW + "点击将所有标记的从最爱中移除" : ChatColor.GREEN + "点击标记所有为最爱"
                 )
         ));
 
@@ -226,81 +226,81 @@ public class PetManagerGUI {
 
             String status;
             if (pausedCount == totalBabies) {
-                status = "All Paused";
+                status = "全部暂停";
             } else if (pausedCount > 0) {
-                status = "Some Paused";
+                status = "一部分暂停";
             } else {
-                status = "All Growing";
+                status = "都在成长";
             }
 
             Material mat = pausedCount == totalBabies ? Material.GOLDEN_CARROT : Material.CARROT;
             gui.setItem(26, createActionButton(
                     mat,
-                    (pausedCount == totalBabies ? ChatColor.GREEN : ChatColor.YELLOW) + "Toggle Growth (Babies)",
+                    (pausedCount == totalBabies ? ChatColor.GREEN : ChatColor.YELLOW) + "切换成长状态 （幼宠）",
                     "batch_toggle_growth_pause",
                     null,
                     List.of(
-                            ChatColor.GRAY + "Current: " + status,
-                            ChatColor.GRAY + "Affects selected babies only.",
+                            ChatColor.GRAY + "当前: " + status,
+                            ChatColor.GRAY + "仅影响选择的幼宠.",
                             "",
-                            ChatColor.YELLOW + "Click to toggle all babies"
+                            ChatColor.YELLOW + "点击切换所有幼崽"
                     )
             ));
         }
 
-        gui.setItem(11, this.createModeButton(Material.FEATHER, "Set Passive", BehaviorMode.PASSIVE, batchData));
-        gui.setItem(13, this.createModeButton(Material.IRON_SWORD, "Set Neutral", BehaviorMode.NEUTRAL, batchData));
-        gui.setItem(15, this.createModeButton(Material.DIAMOND_SWORD, "Set Aggressive", BehaviorMode.AGGRESSIVE, batchData));
+        gui.setItem(11, this.createModeButton(Material.FEATHER, "设置友善状态", BehaviorMode.PASSIVE, batchData));
+        gui.setItem(13, this.createModeButton(Material.IRON_SWORD, "设置中立状态", BehaviorMode.NEUTRAL, batchData));
+        gui.setItem(15, this.createModeButton(Material.DIAMOND_SWORD, "设置敌对状态", BehaviorMode.AGGRESSIVE, batchData));
 
         if (allCanSit) {
-            String sitStandName = allSitting ? ChatColor.GREEN + "Make Pets Stand" : ChatColor.YELLOW + "Make Pets Sit";
-            String sitStandStatus = "Current: " + (allSitting ? "All Sitting" : anySitting ? "Mixed" : "All Standing");
+            String sitStandName = allSitting ? ChatColor.GREEN + "让宠物站立" : ChatColor.YELLOW + "让宠物坐下";
+            String sitStandStatus = "当前: " + (allSitting ? "全部坐下" : anySitting ? "Mixed" : "全部站立");
             gui.setItem(20, this.createActionButton(allSitting ? Material.ARMOR_STAND : Material.SADDLE, sitStandName, "batch_toggle_sit", null, Collections.singletonList(ChatColor.GRAY + sitStandStatus)));
         }
 
-        gui.setItem(22, this.createActionButton(Material.ENDER_PEARL, ChatColor.LIGHT_PURPLE + "Teleport Pets to You", "batch_teleport", null, Collections.singletonList(ChatColor.GRAY + "Summons all selected pets.")));
-        gui.setItem(24, this.createActionButton(Material.MILK_BUCKET, ChatColor.AQUA + "Calm Pets", "batch_calm", null, Collections.singletonList(ChatColor.GRAY + "Clears targets for all selected pets.")));
+        gui.setItem(22, this.createActionButton(Material.ENDER_PEARL, ChatColor.LIGHT_PURPLE + "传送宠物到你的位置", "batch_teleport", null, Collections.singletonList(ChatColor.GRAY + "召唤所有已选择宠物。")));
+        gui.setItem(24, this.createActionButton(Material.MILK_BUCKET, ChatColor.AQUA + "镇静宠物", "batch_calm", null, Collections.singletonList(ChatColor.GRAY + "Clears targets for all selected pets.")));
 
         String protName = allProtected
-                ? ChatColor.YELLOW + "Disable Mutual Non-Aggression"
-                : ChatColor.GREEN + "Enable Mutual Non-Aggression";
-        String protStatus = "Current: " + (allProtected ? "All Protected" : anyProtected ? "Mixed" : "All Unprotected");
+                ? ChatColor.YELLOW + "禁用互不攻击状态"
+                : ChatColor.GREEN + "启用互不攻击状态";
+        String protStatus = "当前: " + (allProtected ? "全部保护" : anyProtected ? "部分保护" : "全部未保护");
         gui.setItem(28, this.createActionButton(
                 Material.SHIELD,
                 protName,
                 "batch_toggle_protection",
                 null,
-                Arrays.asList(ChatColor.GRAY + protStatus, "", ChatColor.GRAY + "Players cannot damage these pets,", ChatColor.GRAY + "and they will not attack players.")
+                Arrays.asList(ChatColor.GRAY + protStatus, "", ChatColor.GRAY + "玩家无法伤害宠物,", ChatColor.GRAY + "并且它们不会攻击玩家。")
         ));
 
-        gui.setItem(30, this.createActionButton(Material.PLAYER_HEAD, ChatColor.GREEN + "Manage Friendly Players", "batch_manage_friendly", null, Collections.singletonList(ChatColor.GRAY + "Manage common friendly players.")));
-        gui.setItem(32, this.createActionButton(Material.LEAD, ChatColor.GOLD + "Transfer Pets", "batch_open_transfer", null, Arrays.asList(ChatColor.GRAY + "Give selected pets to another player", ChatColor.YELLOW + "⚠ This cannot be undone!")));
+	gui.setItem(30, this.createActionButton(Material.PLAYER_HEAD, ChatColor.GREEN + "管理友好玩家", "batch_manage_friendly", null, Collections.singletonList(ChatColor.GRAY + "管理所有的友好玩家。")));
+        gui.setItem(32, this.createActionButton(Material.LEAD, ChatColor.GOLD + "赠予宠物", "batch_open_transfer", null, Arrays.asList(ChatColor.GRAY + "将所选宠物给某个玩家", ChatColor.YELLOW + "⚠ 该操作不可逆!")));
 
         EntityType type = selectedPets.get(0).getEntityType();
         ItemStack backButton = new ItemStack(Material.ARROW);
         ItemMeta meta = backButton.getItemMeta();
-        meta.setDisplayName(ChatColor.YELLOW + "Back to Pet Selection");
+        meta.setDisplayName(ChatColor.YELLOW + "返回宠物选择");
         meta.getPersistentDataContainer().set(BatchActionsGUI.BATCH_ACTION_KEY, PersistentDataType.STRING, "open_pet_select");
         meta.getPersistentDataContainer().set(BatchActionsGUI.PET_TYPE_KEY, PersistentDataType.STRING, type.name());
         backButton.setItemMeta(meta);
         gui.setItem(45, backButton);
 
-        gui.setItem(53, this.createActionButton(Material.BARRIER, ChatColor.RED + "Free Selected Pets", "batch_free_pet_prompt", null, Arrays.asList(ChatColor.DARK_RED + "" + ChatColor.BOLD + "WARNING:", ChatColor.RED + "This is permanent!")));
+        gui.setItem(53, this.createActionButton(Material.BARRIER, ChatColor.RED + "放归宠物", "batch_free_pet_prompt", null, Arrays.asList(ChatColor.DARK_RED + "" + ChatColor.BOLD + "警告:", ChatColor.RED + "这将是永久性的！")));
 
         player.openInventory(gui);
     }
 
     public void openBatchConfirmFreeMenu(Player player, Set<UUID> selectedPetUUIDs) {
-        String title = ChatColor.DARK_RED + "Confirm Free: " + selectedPetUUIDs.size() + " Pets";
+        String title = ChatColor.DARK_RED + "确认放归: " + selectedPetUUIDs.size() + " 宠物";
         Inventory gui = Bukkit.createInventory(player, 27, title);
 
         gui.setItem(13, this.createItem(
                 Material.HOPPER,
-                ChatColor.YELLOW + "Free " + selectedPetUUIDs.size() + " Pets",
+                ChatColor.YELLOW + "放归 " + selectedPetUUIDs.size() + " 宠物",
                 Arrays.asList(
-                        ChatColor.DARK_RED + "⚠ WARNING ⚠",
-                        ChatColor.RED + "This action cannot be undone!",
-                        ChatColor.RED + "The selected pets will be permanently freed."
+                        ChatColor.DARK_RED + "⚠ 警告 ⚠",
+                        ChatColor.RED + "该操作不可逆!",
+                        ChatColor.RED + "选择的宠物将被永久放归自然。"
                 )
         ));
 
@@ -309,17 +309,17 @@ public class PetManagerGUI {
                 ChatColor.GREEN + "Cancel",
                 "open_batch_manage",
                 null,
-                Collections.singletonList(ChatColor.GRAY + "Keep your pets")
+                Collections.singletonList(ChatColor.GRAY + "保留你的宠物")
         ));
 
         gui.setItem(15, this.createActionButton(
                 Material.RED_WOOL,
-                ChatColor.DARK_RED + "Confirm Free Pets",
+                ChatColor.DARK_RED + "确认放归宠物",
                 "batch_confirm_free",
                 null,
                 Arrays.asList(
-                        ChatColor.RED + "Click to permanently free these pets",
-                        ChatColor.DARK_RED + "This cannot be undone!"
+                        ChatColor.RED + "点击永久放归宠物",
+                        ChatColor.DARK_RED + "该操作不可逆!"
                 )
         ));
 
@@ -327,7 +327,7 @@ public class PetManagerGUI {
     }
 
     public void openBatchFriendlyPlayerMenu(Player player, Set<UUID> selectedPetUUIDs, int page) {
-        String title = ChatColor.DARK_AQUA + "Batch Friendly: " + selectedPetUUIDs.size() + " Pets";
+	String title = ChatColor.DARK_AQUA + "批量选择友好态度: " + selectedPetUUIDs.size() + " 宠物";
         Inventory gui = Bukkit.createInventory(player, 54, title);
 
         List<PetData> pets = selectedPetUUIDs.stream().map(petManager::getPetData).filter(Objects::nonNull).toList();
@@ -347,24 +347,24 @@ public class PetManagerGUI {
         for (int i = startIndex; i < endIndex; i++) {
             UUID friendlyUUID = friendlyList.get(i);
             OfflinePlayer friendly = Bukkit.getOfflinePlayer(friendlyUUID);
-            ItemStack head = this.createPlayerHead(friendlyUUID, ChatColor.YELLOW + friendly.getName(), "remove_batch_friendly", null, Collections.singletonList(ChatColor.RED + "Click to remove from all selected pets"));
+            ItemStack head = this.createPlayerHead(friendlyUUID, ChatColor.YELLOW + friendly.getName(), "remove_batch_friendly", null, Collections.singletonList(ChatColor.RED + "点击从所有已选宠物移除。"));
             gui.setItem(i - startIndex, head);
         }
 
         if (page > 0) {
-            gui.setItem(45, createActionButton(Material.ARROW, ChatColor.GREEN + "Previous Page", "batch_friendly_page", null, null));
+		gui.setItem(45, createActionButton(Material.ARROW, ChatColor.GREEN + "上一页", "batch_friendly_page", null, null));
         }
-        gui.setItem(48, createActionButton(Material.ANVIL, ChatColor.GREEN + "Add Friendly Player", "add_batch_friendly_prompt", null, Collections.singletonList(ChatColor.GRAY + "Adds a player as friendly to ALL selected pets.")));
+	gui.setItem(48, createActionButton(Material.ANVIL, ChatColor.GREEN + "添加友好玩家", "add_batch_friendly_prompt", null, Collections.singletonList(ChatColor.GRAY + "将一名玩家设为所有已选宠物的友善目标。")));
         if (endIndex < friendlyList.size()) {
-            gui.setItem(50, createActionButton(Material.ARROW, ChatColor.GREEN + "Next Page", "batch_friendly_page", null, null));
+            gui.setItem(50, createActionButton(Material.ARROW, ChatColor.GREEN + "下一页", "batch_friendly_page", null, null));
         }
-        gui.setItem(53, createActionButton(Material.ARROW, ChatColor.YELLOW + "Back to Batch Management", "open_batch_manage", null, null));
+        gui.setItem(53, createActionButton(Material.ARROW, ChatColor.YELLOW + "返回批量管理", "open_batch_manage", null, null));
 
         player.openInventory(gui);
     }
 
     public void openBatchTransferMenu(Player player, Set<UUID> selectedPetUUIDs) {
-        String title = ChatColor.DARK_AQUA + "Transfer " + selectedPetUUIDs.size() + " Pets";
+        String title = ChatColor.DARK_AQUA + "赠予 " + selectedPetUUIDs.size() + " 宠物";
 
         List<Player> eligiblePlayers = Bukkit.getOnlinePlayers().stream()
                 .filter(p -> !p.getUniqueId().equals(getEffectiveOwner(player)))
@@ -380,24 +380,24 @@ public class PetManagerGUI {
         Inventory gui = Bukkit.createInventory(player, invSize, title);
 
         if (eligiblePlayers.isEmpty()) {
-            gui.setItem(invSize == 27 ? 13 : 22, this.createItem(Material.BARRIER, ChatColor.RED + "No Players Online", Collections.singletonList(ChatColor.GRAY + "No one to transfer to!")));
+            gui.setItem(invSize == 27 ? 13 : 22, this.createItem(Material.BARRIER, ChatColor.RED + "没有玩家在线", Collections.singletonList(ChatColor.GRAY + "没有可赠予的玩家!")));
         } else {
             for (int i = 0; i < eligiblePlayers.size(); i++) {
                 if (i >= 45) break;
                 Player target = eligiblePlayers.get(i);
-                ItemStack head = this.createPlayerHead(target.getUniqueId(), ChatColor.YELLOW + target.getName(), "batch_transfer_to_player", null, Arrays.asList(ChatColor.GRAY + "Click to transfer " + selectedPetUUIDs.size() + " pets", ChatColor.GRAY + "to " + target.getName(), "", ChatColor.YELLOW + "⚠ This cannot be undone!"));
+                ItemStack head = this.createPlayerHead(target.getUniqueId(), ChatColor.YELLOW + target.getName(), "batch_transfer_to_player", null, Arrays.asList(ChatColor.GRAY + "点击赠予 " + selectedPetUUIDs.size() + " 宠物", ChatColor.GRAY + "给 " + target.getName(), "", ChatColor.YELLOW + "⚠ 此操作不可逆!"));
                 gui.setItem(i, head);
             }
         }
 
-        gui.setItem(invSize - 1, this.createActionButton(Material.ARROW, ChatColor.YELLOW + "Back to Batch Management", "open_batch_manage", null, null));
+        gui.setItem(invSize - 1, this.createActionButton(Material.ARROW, ChatColor.YELLOW + "返回批量管理", "open_batch_manage", null, null));
         player.openInventory(gui);
     }
 
     public void openPetMenu(Player player, UUID petUUID) {
         PetData petData = this.petManager.getPetData(petUUID);
         if (petData == null) {
-            player.sendMessage(ChatColor.RED + "Error: Could not find data for that pet. It might have been freed or died.");
+            player.sendMessage(ChatColor.RED + "无法找到该宠物数据。它可能已被放归或死亡。");
             this.openMainMenu(player);
             return;
         }
@@ -417,27 +417,27 @@ public class PetManagerGUI {
             gui = Bukkit.createInventory(player, 27, title);
             ItemStack skull = new ItemStack(Material.SKELETON_SKULL);
             SkullMeta meta = (SkullMeta) skull.getItemMeta();
-            meta.setDisplayName(ChatColor.RED + "[DEAD] " + petData.getDisplayName());
+            meta.setDisplayName(ChatColor.RED + "[死亡] " + petData.getDisplayName());
             meta.setLore(List.of(
-                    ChatColor.DARK_RED + "This pet is dead!",
-                    ChatColor.GRAY + "Choose an action below."
+                    ChatColor.DARK_RED + "该宠物已死亡!",
+                    ChatColor.GRAY + "在上方选择一个操作."
             ));
             skull.setItemMeta(meta);
             gui.setItem(13, skull);
             Material reviveItem = this.plugin.getConfigManager().getReviveItem();
             gui.setItem(11, this.createActionButton(
             		reviveItem,
-                    ChatColor.GREEN + "Revive Pet",
+                    ChatColor.GREEN + "复活宠物",
                     "confirm_revive_pet",
                     petUUID,
-                    List.of(ChatColor.GRAY + "Revive this pet with a '" + reviveItem.name() + "'.")
+                    List.of(ChatColor.GRAY + "复活这只宠物通过 '" + reviveItem.name() + "'.")
             ));
             gui.setItem(15, this.createActionButton(
                     Material.BARRIER,
-                    ChatColor.RED + "Remove Pet",
+                    ChatColor.RED + "移除宠物",
                     "confirm_remove_pet",
                     petUUID,
-                    List.of(ChatColor.GRAY + "Permanently delete this pet.")
+                    List.of(ChatColor.GRAY + "永久删除这只宠物。")
             ));
             player.openInventory(gui);
             return;
@@ -446,26 +446,26 @@ public class PetManagerGUI {
         Entity petEntity = Bukkit.getEntity(petUUID);
 
         List<String> headerLore = new ArrayList<>();
-        headerLore.add(ChatColor.GRAY + "Type: " + ChatColor.WHITE + petData.getEntityType().name());
-        headerLore.add(ChatColor.GRAY + "Mode: " + ChatColor.WHITE + petData.getMode().name());
+        headerLore.add(ChatColor.GRAY + "类型: " + ChatColor.WHITE + petData.getEntityType().name());
+        headerLore.add(ChatColor.GRAY + "模式: " + ChatColor.WHITE + petData.getMode().name());
         if (petEntity instanceof LivingEntity livingEntity && petEntity.isValid()) {
             double health = livingEntity.getHealth();
             double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-            headerLore.add(ChatColor.RED + "Health: " + ChatColor.WHITE + String.format("%.1f", health) + " / " + String.format("%.1f", maxHealth));
+		headerLore.add(ChatColor.RED + "生命: " + ChatColor.WHITE + String.format("%.1f", health) + " / " + String.format("%.1f", maxHealth));
         } else {
-            headerLore.add(ChatColor.GRAY + "Health: Unknown (Unloaded)");
+		headerLore.add(ChatColor.GRAY + "生命: 未知 (未加载)");
         }
-        headerLore.add(ChatColor.GRAY + "Protection: " + (protectionEnabled ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"));
+        headerLore.add(ChatColor.GRAY + "Protection: " + (protectionEnabled ? ChatColor.GREEN + "启用" : ChatColor.RED + "禁用"));
         int friendlyCount = petData.getFriendlyPlayers().size();
         if (friendlyCount > 0) {
-            headerLore.add("" + ChatColor.GREEN + friendlyCount + " Friendly Player" + (friendlyCount == 1 ? "" : "s"));
+		headerLore.add("" + ChatColor.GREEN + friendlyCount + " 友好玩家" + (friendlyCount == 1 ? "" : "s"));
         }
         if (petEntity instanceof Ageable ageable && !ageable.isAdult()) {
-            headerLore.add(ChatColor.LIGHT_PURPLE + "Baby");
+            headerLore.add(ChatColor.LIGHT_PURPLE + "幼宠");
         }
         headerLore.add("");
-        headerLore.add(ChatColor.YELLOW + "Left-click: Customize Display"); 
-        headerLore.add(ChatColor.YELLOW + "Right-click: Toggle Favorite");
+        headerLore.add(ChatColor.YELLOW + "左键：自定义展示"); 
+        headerLore.add(ChatColor.YELLOW + "右键：切换最爱");
 
         
         ItemStack header = new ItemStack(headerIcon);
@@ -485,20 +485,20 @@ public class PetManagerGUI {
             boolean paused = petData.isGrowthPaused();
             gui.setItem(8, createActionButton(
                     paused ? Material.GOLDEN_CARROT : Material.CARROT,
-                    (paused ? ChatColor.GREEN : ChatColor.YELLOW) + "Pause Growth",
+                    (paused ? ChatColor.GREEN : ChatColor.YELLOW) + "停止成长",
                     "toggle_growth_pause",
                     petUUID,
                     List.of(
-                            ChatColor.GRAY + "Current: " + (paused ? "Paused" : "Growing"),
+                            ChatColor.GRAY + "当前: " + (paused ? "暂停" : "成长中"),
                             "",
-                            ChatColor.YELLOW + "Click to toggle"
+                            ChatColor.YELLOW + "点击切换"
                     )
             ));
         }
 
-        gui.setItem(11, this.createModeButton(Material.FEATHER, "Set Passive", BehaviorMode.PASSIVE, petData));
-        gui.setItem(13, this.createModeButton(Material.IRON_SWORD, "Set Neutral", BehaviorMode.NEUTRAL, petData));
-        gui.setItem(15, this.createModeButton(Material.DIAMOND_SWORD, "Set Aggressive", BehaviorMode.AGGRESSIVE, petData));
+        gui.setItem(11, this.createModeButton(Material.FEATHER, "设置友善状态", BehaviorMode.PASSIVE, petData));
+        gui.setItem(13, this.createModeButton(Material.IRON_SWORD, "设置中立状态", BehaviorMode.NEUTRAL, petData));
+        gui.setItem(15, this.createModeButton(Material.DIAMOND_SWORD, "设置敌对状态", BehaviorMode.AGGRESSIVE, petData));
 
         boolean canSit = petEntity instanceof Sittable;
         if (canSit) {
@@ -508,70 +508,70 @@ public class PetManagerGUI {
             }
             gui.setItem(20, this.createActionButton(
                     isSitting ? Material.ARMOR_STAND : Material.SADDLE,
-                    isSitting ? ChatColor.GREEN + "Make Pet Stand" : ChatColor.YELLOW + "Make Pet Sit",
+                    isSitting ? ChatColor.GREEN + "让宠物站立" : ChatColor.YELLOW + "让宠物坐下",
                     "toggle_sit",
                     petData.getPetUUID(),
-                    Collections.singletonList(ChatColor.GRAY + "Current: " + (isSitting ? "Sitting" : "Standing"))
+                    Collections.singletonList(ChatColor.GRAY + "当前: " + (isSitting ? "坐下" : "站立"))
             ));
         }
 
         gui.setItem(22, this.createActionButton(
                 Material.ENDER_PEARL,
-                ChatColor.LIGHT_PURPLE + "Teleport Pet to You",
+                ChatColor.LIGHT_PURPLE + "传送宠物到你的位置",
                 "teleport_pet",
                 petData.getPetUUID(),
-                Collections.singletonList(ChatColor.GRAY + "Summons this pet to your location.")
+                Collections.singletonList(ChatColor.GRAY + "召唤宠物到你的位置。")
         ));
 
         gui.setItem(24, this.createActionButton(
                 Material.MILK_BUCKET,
-                ChatColor.AQUA + "Calm Pet",
+                ChatColor.AQUA + "镇静宠物",
                 "calm_pet",
                 petData.getPetUUID(),
                 Arrays.asList(
-                        ChatColor.GRAY + "Clears the pet's current target",
-                        ChatColor.GRAY + "and resets any anger"
+                        ChatColor.GRAY + "清除宠物当前的目标",
+                        ChatColor.GRAY + "并重设所有愤怒值"
                 )
         ));
 
         gui.setItem(29, this.createActionButton(
                 Material.ANVIL,
-                ChatColor.GREEN + "Rename Pet",
+	ChatColor.GREEN + "重命名宠物",
                 "rename_pet_prompt",
                 petData.getPetUUID(),
                 Arrays.asList(
-                        ChatColor.GRAY + "Left-click: Change your pet's name via chat.",
-                        ChatColor.GRAY + "Shift-click: Reset to default name."
+                        ChatColor.GRAY + "左键：点击并在聊天栏输入新的昵称",
+                        ChatColor.GRAY + "Shift+点击: 重设为默认名字"
                 )
         ));
 
         gui.setItem(31, this.createActionButton(
                 Material.PLAYER_HEAD,
-                ChatColor.GREEN + "Manage Friendly Players",
+                ChatColor.GREEN + "管理友好玩家",
                 "manage_friendly",
                 petData.getPetUUID(),
-                Collections.singletonList(ChatColor.GRAY + "Set players this pet will never attack.")
+                Collections.singletonList(ChatColor.GRAY + "设置宠物不会攻击的玩家")
         ));
 
         gui.setItem(33, this.createActionButton(
                 Material.LEAD,
-                ChatColor.GOLD + "Transfer Pet",
+                ChatColor.GOLD + "赠予宠物",
                 "open_transfer",
                 petData.getPetUUID(),
                 Arrays.asList(
-                        ChatColor.GRAY + "Give this pet to another player",
-                        ChatColor.YELLOW + "⚠ This cannot be undone!"
+                        ChatColor.GRAY + "把宠物赠予其他玩家",
+                        ChatColor.YELLOW + "⚠ 此操作不可逆!"
                 )
         ));
 
         String protName = protectionEnabled
-                ? ChatColor.YELLOW + "Disable Mutual Non-Aggression"
-                : ChatColor.GREEN + "Enable Mutual Non-Aggression";
+                ? ChatColor.YELLOW + "禁用互不攻击状态"
+                : ChatColor.GREEN + "启用互不攻击状态";
         List<String> protLore = new ArrayList<>();
-        protLore.add(ChatColor.GRAY + "Current: " + (protectionEnabled ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"));
+        protLore.add(ChatColor.GRAY + "当前: " + (protectionEnabled ? ChatColor.GREEN + "已启用" : ChatColor.RED + "已禁用"));
         protLore.add("");
-        protLore.add(ChatColor.GRAY + "Players cannot damage this pet,");
-        protLore.add(ChatColor.GRAY + "and this pet will not attack players.");
+        protLore.add(ChatColor.GRAY + "玩家无法伤害宠物,");
+        protLore.add(ChatColor.GRAY + "并且它们不会攻击玩家。");
         gui.setItem(35, this.createActionButton(
                 Material.SHIELD,
                 protName,
@@ -583,14 +583,14 @@ public class PetManagerGUI {
         
 
 
-        gui.setItem(49, this.createActionButton(Material.ARROW, ChatColor.YELLOW + "Back to Pet List", "back_to_main", null, null));
+        gui.setItem(49, this.createActionButton(Material.ARROW, ChatColor.YELLOW + "返回宠物列表", "back_to_main", null, null));
 
         gui.setItem(53, this.createActionButton(
                 Material.BARRIER,
-                ChatColor.RED + "Free This Pet",
+                ChatColor.RED + "放归这只宠物",
                 "confirm_free_pet_prompt",
                 petData.getPetUUID(),
-                Arrays.asList("" + ChatColor.DARK_RED + ChatColor.BOLD + "WARNING:", ChatColor.RED + "This is permanent!")
+                Arrays.asList("" + ChatColor.DARK_RED + ChatColor.BOLD + "警告:", ChatColor.RED + "这是永久性的!")
         ));
 
         player.openInventory(gui);
@@ -600,12 +600,12 @@ public class PetManagerGUI {
     public void openConfirmFreeMenu(Player player, UUID petUUID) {
         PetData petData = this.petManager.getPetData(petUUID);
         if (petData == null) {
-            player.sendMessage(ChatColor.RED + "Error: Could not find data for that pet.");
+            player.sendMessage(ChatColor.RED + "错误：无法找到该宠物数据。");
             this.openMainMenu(player);
             return;
         }
 
-        String title = ChatColor.DARK_RED + "Confirm Free: " + ChatColor.RED + petData.getDisplayName();
+        String title = ChatColor.DARK_RED + "确认放归: " + ChatColor.RED + petData.getDisplayName();
         if (title.length() > 32) {
             title = title.substring(0, 29) + "...";
         }
@@ -616,11 +616,11 @@ public class PetManagerGUI {
                 this.getPetMaterial(petData.getEntityType()),
                 ChatColor.YELLOW + petData.getDisplayName(),
                 Arrays.asList(
-                        ChatColor.GRAY + "Type: " + ChatColor.WHITE + petData.getEntityType().name(),
+                        ChatColor.GRAY + "类型: " + ChatColor.WHITE + petData.getEntityType().name(),
                         "",
-                        ChatColor.DARK_RED + "⚠ WARNING ⚠",
-                        ChatColor.RED + "This action cannot be undone!",
-                        ChatColor.RED + "The pet will be permanently freed."
+                        ChatColor.DARK_RED + "⚠ 警告 ⚠",
+                        ChatColor.RED + "此操作不可逆!",
+                        ChatColor.RED + "宠物将会被永久放归自然。"
                 ),
                 petUUID
         ));
@@ -630,17 +630,17 @@ public class PetManagerGUI {
                 ChatColor.GREEN + "Cancel",
                 "cancel_free",
                 petUUID,
-                Collections.singletonList(ChatColor.GRAY + "Keep your pet")
+                Collections.singletonList(ChatColor.GRAY + "保留你的宠物")
         ));
 
         gui.setItem(15, this.createActionButton(
                 Material.RED_WOOL,
-                ChatColor.DARK_RED + "Confirm Free Pet",
+                ChatColor.DARK_RED + "确认放归宠物",
                 "confirm_free",
                 petUUID,
                 Arrays.asList(
-                        ChatColor.RED + "Click to permanently free this pet",
-                        ChatColor.DARK_RED + "This cannot be undone!"
+                        ChatColor.RED + "点击永久放归宠物",
+                        ChatColor.DARK_RED + "此操作不可逆!"
                 )
         ));
 
@@ -651,12 +651,12 @@ public class PetManagerGUI {
     public void openTransferMenu(Player player, UUID petUUID) {
         PetData petData = this.petManager.getPetData(petUUID);
         if (petData == null) {
-            player.sendMessage(ChatColor.RED + "Error: Could not find data for that pet.");
+            player.sendMessage(ChatColor.RED + "错误：无法找到该宠物数据。");
             this.openMainMenu(player);
             return;
         }
 
-        String title = ChatColor.DARK_AQUA + "Transfer: " + ChatColor.AQUA + petData.getDisplayName();
+        String title = ChatColor.DARK_AQUA + "赠予: " + ChatColor.AQUA + petData.getDisplayName();
         if (title.length() > 32) {
             title = title.substring(0, 29) + "...";
         }
@@ -678,20 +678,20 @@ public class PetManagerGUI {
             gui.setItem(invSize == 27 ? 13 : 22, this.createItem(
                     Material.BARRIER,
                     ChatColor.RED + "No Players Online",
-                    Collections.singletonList(ChatColor.GRAY + "No one to transfer to!")
+                    Collections.singletonList(ChatColor.GRAY + "没有可赠予的玩家!")
             ));
         } else {
             for (int i = 0; i < eligiblePlayers.size(); i++) {
                 if (i >= 45) break;
                 Player target = eligiblePlayers.get(i);
                 ItemStack head = this.createPlayerHead(target.getUniqueId(), ChatColor.YELLOW + target.getName(), "transfer_to_player", petUUID,
-                        Arrays.asList(ChatColor.GRAY + "Click to transfer " + petData.getDisplayName(), ChatColor.GRAY + "to " + target.getName(), "", ChatColor.YELLOW + "⚠ This cannot be undone!"));
+                        Arrays.asList(ChatColor.GRAY + "点击赠予 " + petData.getDisplayName(), ChatColor.GRAY + "给 " + target.getName(), "", ChatColor.YELLOW + "⚠ 此操作不可逆!"));
                 gui.setItem(i, head);
             }
         }
 
 
-        gui.setItem(invSize - 1, this.createActionButton(Material.ARROW, ChatColor.YELLOW + "Back to Pet Management", "back_to_pet", petUUID, null));
+        gui.setItem(invSize - 1, this.createActionButton(Material.ARROW, ChatColor.YELLOW + "返回宠物管理 ", "back_to_pet", petUUID, null));
         player.openInventory(gui);
     }
 
@@ -699,7 +699,7 @@ public class PetManagerGUI {
     public void openFriendlyPlayerMenu(Player player, UUID petUUID, int page) {
         PetData petData = this.petManager.getPetData(petUUID);
         if (petData == null) {
-            player.sendMessage(ChatColor.RED + "Error: Could not find data for that pet.");
+            player.sendMessage(ChatColor.RED + "错误：无法找到该宠物数据。.");
             this.openMainMenu(player);
             return;
         }
@@ -730,22 +730,22 @@ public class PetManagerGUI {
                     ChatColor.YELLOW + name,
                     "remove_friendly",
                     petUUID,
-                    Collections.singletonList(ChatColor.RED + "Click to remove from friendly list")
+		Collections.singletonList(ChatColor.RED + "点击移出友好玩家名单")
             );
             gui.setItem(slot++, head);
         }
 
         if (page > 0) {
-            gui.setItem(45, this.createFriendlyNavButton(Material.ARROW, ChatColor.GREEN + "Previous Page", "friendly_page", petUUID, page - 1));
+            gui.setItem(45, this.createFriendlyNavButton(Material.ARROW, ChatColor.GREEN + "上一页", "friendly_page", petUUID, page - 1));
         }
 
-        gui.setItem(48, this.createActionButton(Material.ANVIL, ChatColor.GREEN + "Add Friendly Player", "add_friendly_prompt", petUUID, Collections.singletonList(ChatColor.GRAY + "Click to type a player name in chat.")));
+	gui.setItem(48, this.createActionButton(Material.ANVIL, ChatColor.GREEN + "添加友好玩家", "add_friendly_prompt", petUUID, Collections.singletonList(ChatColor.GRAY + "点击并在聊天框输入友好玩家的昵称。")));
 
         if (endIndex < friendlyList.size()) {
-            gui.setItem(50, this.createFriendlyNavButton(Material.ARROW, ChatColor.GREEN + "Next Page", "friendly_page", petUUID, page + 1));
+            gui.setItem(50, this.createFriendlyNavButton(Material.ARROW, ChatColor.GREEN + "下一页", "friendly_page", petUUID, page + 1));
         }
 
-        gui.setItem(53, this.createActionButton(Material.ARROW, ChatColor.YELLOW + "Back to Pet Management", "back_to_pet", petUUID, null));
+        gui.setItem(53, this.createActionButton(Material.ARROW, ChatColor.YELLOW + "返回宠物管理", "back_to_pet", petUUID, null));
 
         player.openInventory(gui);
     }
@@ -755,12 +755,12 @@ public class PetManagerGUI {
     public void openColorPicker(Player player, UUID petUUID) {
         PetData petData = petManager.getPetData(petUUID);
         if (petData == null) {
-            player.sendMessage(ChatColor.RED + "Error: Pet not found.");
+            player.sendMessage(ChatColor.RED + "错误：无法找到该宠物。");
             openMainMenu(player);
             return;
         }
-        String title = ChatColor.DARK_AQUA + "Pick Color: " + petData.getDisplayName();
-        if (title.length() > 32) title = ChatColor.DARK_AQUA + "Pick Color";
+        String title = ChatColor.DARK_AQUA + "选择颜色: " + petData.getDisplayName();
+        if (title.length() > 32) title = ChatColor.DARK_AQUA + "选择颜色";
 
         Inventory gui = Bukkit.createInventory(player, 27, title);
 
@@ -791,7 +791,7 @@ public class PetManagerGUI {
             ItemStack item = new ItemStack(mat);
             ItemMeta meta = item.getItemMeta();
             meta.setDisplayName(color + color.name());
-            meta.setLore(Collections.singletonList(ChatColor.GRAY + "Click to set this color."));
+            meta.setLore(Collections.singletonList(ChatColor.GRAY + "点击设置该颜色."));
             meta.getPersistentDataContainer().set(ACTION_KEY, PersistentDataType.STRING, "choose_color");
             meta.getPersistentDataContainer().set(PET_UUID_KEY, PersistentDataType.STRING, petUUID.toString());
             meta.getPersistentDataContainer().set(COLOR_KEY, PersistentDataType.STRING, color.name());
@@ -800,7 +800,7 @@ public class PetManagerGUI {
         }
 
         
-        gui.setItem(26, createActionButton(Material.ARROW, ChatColor.YELLOW + "Back", "back_to_pet", petUUID, null));
+        gui.setItem(26, createActionButton(Material.ARROW, ChatColor.YELLOW + "返回", "back_to_pet", petUUID, null));
 
         player.openInventory(gui);
     }
@@ -844,17 +844,17 @@ public class PetManagerGUI {
 
     public void openBatchConfirmRemoveDeadMenu(Player player, EntityType petType, int deadPetCount) {
         String typeName = petType.name().toLowerCase().replace('_', ' ');
-        String title = ChatColor.DARK_RED + "Confirm Remove: Dead " + typeName + "s";
+        String title = ChatColor.DARK_RED + "确认移除：死亡 " + typeName + "类";
         Inventory gui = Bukkit.createInventory(player, 27, title);
 
         ItemStack info = createItem(
                 Material.SKELETON_SKULL,
-                ChatColor.YELLOW + "Remove " + deadPetCount + " Dead Pet Record(s)",
+                ChatColor.YELLOW + "移除 " + deadPetCount + " Dead Pet Record(s)",
                 Arrays.asList(
-                        ChatColor.GRAY + "Pet Type: " + ChatColor.WHITE + typeName,
+                        ChatColor.GRAY + "宠物类型: " + ChatColor.WHITE + typeName,
                         "",
-                        ChatColor.DARK_RED + "⚠ WARNING ⚠",
-                        ChatColor.RED + "This action is permanent and cannot be undone."
+                        ChatColor.DARK_RED + "⚠ 警告 ⚠",
+                        ChatColor.RED + "该操作不可逆。"
                 )
         );
         gui.setItem(13, info);
@@ -862,7 +862,7 @@ public class PetManagerGUI {
         ItemStack cancel = new ItemStack(Material.LIME_WOOL);
         ItemMeta cancelMeta = cancel.getItemMeta();
         cancelMeta.setDisplayName(ChatColor.GREEN + "Cancel");
-        cancelMeta.setLore(Collections.singletonList(ChatColor.GRAY + "Keep the pet records."));
+        cancelMeta.setLore(Collections.singletonList(ChatColor.GRAY + "保留宠物记录."));
         cancelMeta.getPersistentDataContainer().set(BatchActionsGUI.BATCH_ACTION_KEY, PersistentDataType.STRING, "open_pet_select");
         cancelMeta.getPersistentDataContainer().set(BatchActionsGUI.PET_TYPE_KEY, PersistentDataType.STRING, petType.name());
         cancel.setItemMeta(cancelMeta);
@@ -870,8 +870,8 @@ public class PetManagerGUI {
 
         ItemStack confirm = new ItemStack(Material.RED_WOOL);
         ItemMeta confirmMeta = confirm.getItemMeta();
-        confirmMeta.setDisplayName(ChatColor.DARK_RED + "Confirm Removal");
-        confirmMeta.setLore(Collections.singletonList(ChatColor.RED + "Click to permanently remove these records."));
+        confirmMeta.setDisplayName(ChatColor.DARK_RED + "确认移除");
+        confirmMeta.setLore(Collections.singletonList(ChatColor.RED + "点击永久移除这些记录。"));
         confirmMeta.getPersistentDataContainer().set(BatchActionsGUI.BATCH_ACTION_KEY, PersistentDataType.STRING, "batch_confirm_remove_dead");
         confirmMeta.getPersistentDataContainer().set(BatchActionsGUI.PET_TYPE_KEY, PersistentDataType.STRING, petType.name());
         confirm.setItemMeta(confirmMeta);
@@ -887,8 +887,8 @@ public class PetManagerGUI {
             SkullMeta meta = (SkullMeta) skull.getItemMeta();
             meta.setDisplayName(ChatColor.RED + "[DEAD] " + petData.getDisplayName());
             meta.setLore(List.of(
-                    ChatColor.DARK_RED + "This pet is dead!",
-                    ChatColor.GRAY + "Click to view revival or removal options."
+                    ChatColor.DARK_RED + "这只宠物已经死亡!",
+                    ChatColor.GRAY + "点击浏览复活或移除选项。"
             ));
             meta.getPersistentDataContainer().set(PET_UUID_KEY, PersistentDataType.STRING, petData.getPetUUID().toString());
             skull.setItemMeta(meta);
@@ -903,27 +903,27 @@ public class PetManagerGUI {
         String displayName = (petData.isFavorite() ? ChatColor.GOLD + "★ " : "") + nameColor + petData.getDisplayName();
         meta.setDisplayName(displayName);
         List<String> lore = new java.util.ArrayList<>();
-        lore.add(ChatColor.GRAY + "Type: " + ChatColor.WHITE + petData.getEntityType().name());
-        lore.add(ChatColor.GRAY + "Mode: " + ChatColor.WHITE + petData.getMode().name());
+        lore.add(ChatColor.GRAY + "类型: " + ChatColor.WHITE + petData.getEntityType().name());
+        lore.add(ChatColor.GRAY + "模式: " + ChatColor.WHITE + petData.getMode().name());
 
         if (petEntity instanceof LivingEntity livingEntity && petEntity.isValid()) {
             double health = livingEntity.getHealth();
             double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-            lore.add(ChatColor.RED + "Health: " + ChatColor.WHITE + String.format("%.1f", health) + " / " + String.format("%.1f", maxHealth));
+            lore.add(ChatColor.RED + "生命: " + ChatColor.WHITE + String.format("%.1f", health) + " / " + String.format("%.1f", maxHealth));
         } else {
-            lore.add(ChatColor.GRAY + "Health: Unknown (Unloaded)");
+            lore.add(ChatColor.GRAY + "生命: 未知 (未加载)");
         }
 
-        lore.add(ChatColor.GRAY + "Protection: " + (petData.isProtectedFromPlayers() ? ChatColor.GREEN + "Enabled" : ChatColor.RED + "Disabled"));
+        lore.add(ChatColor.GRAY + "保护: " + (petData.isProtectedFromPlayers() ? ChatColor.GREEN + "已启用" : ChatColor.RED + "未启用"));
         int friendlyCount = petData.getFriendlyPlayers().size();
         if (friendlyCount > 0) {
-            lore.add("" + ChatColor.GREEN + friendlyCount + " Friendly Player" + (friendlyCount == 1 ? "" : "s"));
+            lore.add("" + ChatColor.GREEN + friendlyCount + " 友好玩家数量" + (friendlyCount == 1 ? "" : "个"));
         }
         if (petEntity instanceof Ageable ageable && !ageable.isAdult()) {
-            lore.add(ChatColor.LIGHT_PURPLE + "Baby");
+            lore.add(ChatColor.LIGHT_PURPLE + "幼宠");
         }
         lore.add("");
-        lore.add(ChatColor.YELLOW + "Click to manage this pet.");
+        lore.add(ChatColor.YELLOW + "点击管理这只宠物");
         meta.setLore(lore);
         meta.getPersistentDataContainer().set(PET_UUID_KEY, PersistentDataType.STRING, petData.getPetUUID().toString());
         item.setItemMeta(meta);
@@ -939,14 +939,14 @@ public class PetManagerGUI {
 
             List<String> lore = new ArrayList<>();
             switch (mode) {
-                case PASSIVE -> lore.add(ChatColor.GRAY + "Pet will not attack any targets.");
+                case PASSIVE -> lore.add(ChatColor.GRAY + "宠物不会攻击任何目标");
                 case NEUTRAL -> {
-                    lore.add(ChatColor.GRAY + "Pet defends owner and attacks");
-                    lore.add(ChatColor.GRAY + "owner's targets (vanilla).");
+                    lore.add(ChatColor.GRAY + "宠物将保护主人并会攻击");
+                    lore.add(ChatColor.GRAY + "主人的目标 (原版).");
                 }
                 case AGGRESSIVE -> {
-                    lore.add(ChatColor.GRAY + "Pet attacks nearby hostiles");
-                    lore.add(ChatColor.GRAY + "proactively (if possible).");
+                    lore.add(ChatColor.GRAY + "宠物攻击邻近的敌对生物");
+                    lore.add(ChatColor.GRAY + "主动执行（如条件允许）。");
                 }
                 default -> {
                 }
@@ -954,14 +954,14 @@ public class PetManagerGUI {
 
             if (isActive) {
                 lore.add("");
-                lore.add(ChatColor.DARK_GREEN + "▶ " + ChatColor.GREEN + "Currently Active");
+                lore.add(ChatColor.DARK_GREEN + "▶ " + ChatColor.GREEN + "当前活跃状态");
             } else if (currentPetData.getMode() == BehaviorMode.BATCH) {
                 lore.add("");
-                lore.add(ChatColor.AQUA + "Selection has mixed modes.");
-                lore.add(ChatColor.YELLOW + "Click to set all to this mode.");
+                lore.add(ChatColor.AQUA + "当前选择包含混合模式。");
+                lore.add(ChatColor.YELLOW + "点击所有为这个模式。");
             } else {
                 lore.add("");
-                lore.add(ChatColor.YELLOW + "Click to activate this mode.");
+                lore.add(ChatColor.YELLOW + "点击激活这个模式。");
             }
 
             meta.setLore(lore);
@@ -1062,12 +1062,12 @@ public class PetManagerGUI {
     public void openCustomizationMenu(Player player, UUID petUUID) {
         PetData petData = petManager.getPetData(petUUID);
         if (petData == null) {
-            player.sendMessage(ChatColor.RED + "Error: Pet not found.");
+            player.sendMessage(ChatColor.RED + "错误：无法找到该宠物。");
             openMainMenu(player);
             return;
         }
-        String title = ChatColor.DARK_AQUA + "Customize: " + petData.getDisplayName();
-        if (title.length() > 32) title = ChatColor.DARK_AQUA + "Customize Pet";
+        String title = ChatColor.DARK_AQUA + "自定义: " + petData.getDisplayName();
+        if (title.length() > 32) title = ChatColor.DARK_AQUA + "自定义宠物";
 
         Inventory gui = Bukkit.createInventory(player, 45, title);
 
@@ -1075,36 +1075,36 @@ public class PetManagerGUI {
         gui.setItem(4, createItem(
                 getDisplayMaterialForPet(petData),
                 getNameColor(petData) + petData.getDisplayName(),
-                Collections.singletonList(ChatColor.GRAY + "Select an option below.")
+                Collections.singletonList(ChatColor.GRAY + "选择以上的选项.")
         ));
 
         
         gui.setItem(20, createActionButton(
                 Material.ITEM_FRAME,
-                ChatColor.AQUA + "Set Display Icon",
+                ChatColor.AQUA + "设置展示图标",
                 "set_display_icon",
                 petUUID,
                 Arrays.asList(
-                        ChatColor.GRAY + "Left-click: Use the item in your main hand",
-                        ChatColor.GRAY + "as this pet's icon.",
-                        ChatColor.GRAY + "Shift-click: Reset to default."
+				        ChatColor.GRAY + "左键：使用你手上的物品",
+                        ChatColor.GRAY + "作为这只宠物的图标",
+                        ChatColor.GRAY + "Shift+点击: 重设为默认."
                 )
         ));
 
         
         gui.setItem(24, createActionButton(
                 Material.WHITE_DYE,
-                ChatColor.AQUA + "Edit Name Color",
+                ChatColor.AQUA + "编辑昵称颜色",
                 "set_display_color",
                 petUUID,
                 Arrays.asList(
-                        ChatColor.GRAY + "Left-click: Pick a color",
-                        ChatColor.GRAY + "Shift-click: Reset to default color."
+                        ChatColor.GRAY + "左键：选择一个颜色",
+                        ChatColor.GRAY + "Shift+点击: 重设为默认名字."
                 )
         ));
 
         
-        gui.setItem(44, createActionButton(Material.ARROW, ChatColor.YELLOW + "Back to Pet Management", "back_to_pet", petUUID, null));
+        gui.setItem(44, createActionButton(Material.ARROW, ChatColor.YELLOW + "返回宠物管理", "back_to_pet", petUUID, null));
 
         player.openInventory(gui);
     }

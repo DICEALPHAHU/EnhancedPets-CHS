@@ -72,7 +72,7 @@ public class PetGUIListener implements Listener {
                     PetData petData = petManager.getPetData(petUUID);
                     if (petData != null && petData.isDead()) {
                         petManager.freePetCompletely(petUUID);
-                        player.sendMessage(ChatColor.GREEN + "Removed dead pet record for " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + ".");
+                        player.sendMessage(ChatColor.GREEN + "已移除死亡宠物记录" + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + ".");
                         guiManager.openMainMenu(player);
                         return;
                     }
@@ -176,7 +176,7 @@ public class PetGUIListener implements Listener {
             }
             case "open_batch_manage" -> {
                 if (selectedPets.isEmpty()) {
-                    player.sendMessage(ChatColor.RED + "You must select at least one pet to manage.");
+                    player.sendMessage(ChatColor.RED + "请至少选择一只宠物来进行操作。");
                 } else {
                     guiManager.openBatchManagementMenu(player, selectedPets);
                 }
@@ -189,7 +189,7 @@ public class PetGUIListener implements Listener {
                             .filter(p -> p.getEntityType() == petType && p.isDead())
                             .toList();
                     if (deadPets.isEmpty()) {
-                        player.sendMessage(ChatColor.YELLOW + "No dead pets of this type found.");
+                        player.sendMessage(ChatColor.YELLOW + "当前未找到该类型的死亡宠物。");
                     } else {
                         guiManager.openBatchConfirmRemoveDeadMenu(player, petType, deadPets.size());
                     }
@@ -203,7 +203,7 @@ public class PetGUIListener implements Listener {
                             .toList();
                     if (!deadPets.isEmpty()) {
                         deadPets.forEach(p -> petManager.freePetCompletely(p.getPetUUID()));
-                        player.sendMessage(ChatColor.GREEN + "Successfully removed " + deadPets.size() + " dead pet record(s).");
+                        player.sendMessage(ChatColor.GREEN + "成功移除" + deadPets.size() + " 死亡的宠物记录。");
                     }
                     batchActionsGUI.openPetSelectionMenu(player, petType, 0);
                 }
@@ -251,18 +251,18 @@ public class PetGUIListener implements Listener {
                 player.closeInventory();
                 UUID override = plugin.getGuiManager().getViewerOwnerOverride(player.getUniqueId());
                 if (override != null && !override.equals(player.getUniqueId())) {
-                    player.sendMessage(ChatColor.RED + "Scan is only available for your own pets while viewing as another player.");
+                    player.sendMessage(ChatColor.RED + "扫描功能仅限于查看自己的宠物时使用，其他玩家视角下无法操作。");
                     guiManager.openMainMenu(player);
                     return;
                 }
-                player.sendMessage(ChatColor.YELLOW + "Scanning for your unregistered pets...");
+                player.sendMessage(ChatColor.YELLOW + "正在扫描您未绑定的宠物...");
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     int foundCount = petManager.scanAndRegisterPetsForOwner(player);
                     if (foundCount > 0) {
-                        player.sendMessage(ChatColor.GREEN + "Success! Found and registered " + foundCount + " new pet(s).");
+                        player.sendMessage(ChatColor.GREEN + "扫描成功！已发现并绑定" + foundCount + " new pet(s).");
                         guiManager.openMainMenu(player);
                     } else {
-                        player.sendMessage(ChatColor.GREEN + "Scan complete. No new unregistered pets were found in loaded areas.");
+                        player.sendMessage(ChatColor.GREEN + "扫描完成，当前已加载区域内未发现新的未绑定宠物。");
                     }
                 });
                 return;
@@ -280,8 +280,8 @@ public class PetGUIListener implements Listener {
                 petData.setFavorite(!petData.isFavorite());
                 petManager.updatePetData(petData);
                 player.sendMessage(petData.isFavorite()
-                        ? ChatColor.GREEN + "Marked " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + " as a favorite!"
-                        : ChatColor.YELLOW + "Removed " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + " from favorites.");
+                        ? ChatColor.GREEN + "标记 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + " 为最爱!"
+                        : ChatColor.YELLOW + "已将 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + " 移除出最爱.");
                 guiManager.openPetMenu(player, petUUID);
                 return;
             } else if (event.isLeftClick()) {
@@ -293,7 +293,7 @@ public class PetGUIListener implements Listener {
 
         if (action.startsWith("batch_")) {
             if (selectedPets == null || selectedPets.isEmpty()) {
-                player.sendMessage(ChatColor.RED + "Your pet selection was lost. Please start again.");
+                player.sendMessage(ChatColor.RED + "当前的宠物选择已失效，请重新选择。");
                 guiManager.openMainMenu(player);
                 return;
             }
@@ -304,7 +304,7 @@ public class PetGUIListener implements Listener {
         if (petUUID != null) {
             PetData petData = petManager.getPetData(petUUID);
             if (petData == null) {
-                player.sendMessage(ChatColor.RED + "This pet no longer exists.");
+                player.sendMessage(ChatColor.RED + "这只宠物已不存在。");
                 guiManager.openMainMenu(player);
                 return;
             }
@@ -321,7 +321,7 @@ public class PetGUIListener implements Listener {
 
     private void handleBatchManagementAction(Player player, String action, PersistentDataContainer data, Set<UUID> selectedPets) {
         if (selectedPets == null || selectedPets.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "No pets selected or selection lost.");
+            player.sendMessage(ChatColor.RED + "未选择宠物或选择失效。");
             guiManager.openMainMenu(player);
             return;
         }
@@ -338,7 +338,7 @@ public class PetGUIListener implements Listener {
                             .filter(e -> e instanceof Creature)
                             .forEach(e -> ((Creature) e).setTarget(null));
                 }
-                player.sendMessage(ChatColor.GREEN + "Set mode for " + petDataList.size() + " pets to " + ChatColor.YELLOW + newMode.name() + ".");
+                player.sendMessage(ChatColor.GREEN + "选择宠物 " + petDataList.size() + " 的模式为 " + ChatColor.YELLOW + newMode.name() + ".");
                 guiManager.openBatchManagementMenu(player, selectedPets);
             }
             case "batch_toggle_growth_pause" -> {
@@ -349,7 +349,7 @@ public class PetGUIListener implements Listener {
                         .toList();
 
                 if (babyUUIDs.isEmpty()) {
-                    player.sendMessage(ChatColor.RED + "No babies in your selection.");
+                    player.sendMessage(ChatColor.RED + "你的选择中没有幼崽宠物。.");
                     guiManager.openBatchManagementMenu(player, selectedPets);
                     break;
                 }
@@ -371,9 +371,9 @@ public class PetGUIListener implements Listener {
                 }
 
                 if (shouldPause) {
-                    player.sendMessage(ChatColor.GREEN + "Paused growth for " + changed + " baby pet(s).");
+                    player.sendMessage(ChatColor.GREEN + "已暂停 " + changed + " 幼宠的成长。");
                 } else {
-                    player.sendMessage(ChatColor.GREEN + "Resumed growth for " + changed + " baby pet(s).");
+                    player.sendMessage(ChatColor.GREEN + "已恢复 " + changed + " 幼宠的成长。");
                 }
                 guiManager.openBatchManagementMenu(player, selectedPets);
             }
@@ -382,7 +382,7 @@ public class PetGUIListener implements Listener {
                 boolean makeFavorite = favoriteCount < petDataList.size();
                 petDataList.forEach(pd -> pd.setFavorite(makeFavorite));
                 petManager.saveAllPetData(petDataList);
-                player.sendMessage(ChatColor.GREEN + (makeFavorite ? "Marked" : "Unmarked") + " " + petDataList.size() + " pets as favorites.");
+                player.sendMessage(ChatColor.GREEN + (makeFavorite ? "已标记" : "未标记") + " " + petDataList.size() + " 宠物为最爱.");
                 guiManager.openBatchManagementMenu(player, selectedPets);
             }
             case "batch_teleport" -> {
@@ -391,7 +391,7 @@ public class PetGUIListener implements Listener {
                         .filter(e -> e != null && e.isValid())
                         .peek(e -> e.teleport(player.getLocation()))
                         .count();
-                player.sendMessage(ChatColor.GREEN + "Summoned " + summoned + " pets!");
+                player.sendMessage(ChatColor.GREEN + "召唤 " + summoned + " 宠物!");
             }
             case "batch_calm" -> {
                 int calmed = (int) selectedPets.stream()
@@ -401,7 +401,7 @@ public class PetGUIListener implements Listener {
                             ((Creature) e).setTarget(null);
                             if (e instanceof Wolf w) w.setAngry(false);
                         }).count();
-                player.sendMessage(ChatColor.GREEN + "Calmed " + calmed + " pets.");
+                player.sendMessage(ChatColor.GREEN + "镇静 " + calmed + " 宠物.");
             }
             case "batch_toggle_sit" -> {
                 List<Sittable> sittables = selectedPets.stream().map(Bukkit::getEntity).filter(e -> e instanceof Sittable).map(e -> (Sittable) e).toList();
@@ -409,7 +409,7 @@ public class PetGUIListener implements Listener {
                     long sittingCount = sittables.stream().filter(Sittable::isSitting).count();
                     boolean shouldSit = sittingCount < sittables.size();
                     sittables.forEach(s -> s.setSitting(shouldSit));
-                    player.sendMessage(ChatColor.GREEN + "Told " + sittables.size() + " pets to " + (shouldSit ? "sit." : "stand."));
+                    player.sendMessage(ChatColor.GREEN + "告诉 " + sittables.size() + " 宠物 " + (shouldSit ? "坐下。" : "站立。"));
                     guiManager.openBatchManagementMenu(player, selectedPets);
                 }
             }
@@ -419,7 +419,7 @@ public class PetGUIListener implements Listener {
                 int count = selectedPets.size();
                 selectedPets.forEach(petManager::freePetCompletely);
                 batchActionsGUI.getPlayerSelections().remove(player.getUniqueId());
-                player.sendMessage(ChatColor.YELLOW + "You have freed " + count + " pets.");
+                player.sendMessage(ChatColor.YELLOW + "你已经放归了" + count + " 宠物");
             }
             case "batch_manage_friendly" -> guiManager.openBatchFriendlyPlayerMenu(player, selectedPets, 0);
             case "batch_friendly_page" -> {
@@ -429,8 +429,8 @@ public class PetGUIListener implements Listener {
             case "add_batch_friendly_prompt" -> {
                 awaitingBatchFriendlyInput.put(player.getUniqueId(), true);
                 player.closeInventory();
-                player.sendMessage(ChatColor.GOLD + "Please type the name of the player to add as friendly for all selected pets.");
-                player.sendMessage(ChatColor.GRAY + "(Type 'cancel' to abort)");
+                player.sendMessage(ChatColor.GOLD + "请输入要设为所有选定宠物友方的玩家名：");
+                player.sendMessage(ChatColor.GRAY + "(输入 'cancel' 放弃这一步)");
             }
             case "remove_batch_friendly" -> {
                 String targetUUIDString = data.get(PetManagerGUI.TARGET_PLAYER_UUID_KEY, PersistentDataType.STRING);
@@ -438,7 +438,7 @@ public class PetGUIListener implements Listener {
                     UUID targetUUID = UUID.fromString(targetUUIDString);
                     petDataList.forEach(pd -> pd.removeFriendlyPlayer(targetUUID));
                     petManager.saveAllPetData(petDataList);
-                    player.sendMessage(ChatColor.GREEN + "Removed " + Bukkit.getOfflinePlayer(targetUUID).getName() + " from " + petDataList.size() + " pets' friendly lists.");
+				player.sendMessage(ChatColor.GREEN + "移除 " + Bukkit.getOfflinePlayer(targetUUID).getName() + " 于 " + petDataList.size() + " 的宠物友好名单");
                     guiManager.openBatchFriendlyPlayerMenu(player, selectedPets, 0);
                 }
             }
@@ -448,7 +448,7 @@ public class PetGUIListener implements Listener {
                 if (targetUUIDString != null) {
                     Player targetPlayer = Bukkit.getPlayer(UUID.fromString(targetUUIDString));
                     if (targetPlayer == null || !targetPlayer.isOnline()) {
-                        player.sendMessage(ChatColor.RED + "That player is no longer online!");
+                        player.sendMessage(ChatColor.RED + "该玩家已经离线!");
                         return;
                     }
                     player.closeInventory();
@@ -460,8 +460,8 @@ public class PetGUIListener implements Listener {
                         }
                     });
                     petManager.saveAllPetData(petDataList);
-                    player.sendMessage(ChatColor.GREEN + "You transferred " + petDataList.size() + " pets to " + ChatColor.YELLOW + targetPlayer.getName());
-                    targetPlayer.sendMessage(ChatColor.GREEN + "You received " + petDataList.size() + " pets from " + ChatColor.YELLOW + oldOwnerName);
+                    player.sendMessage(ChatColor.GREEN + "你赠予 " + petDataList.size() + " 宠物给 " + ChatColor.YELLOW + targetPlayer.getName());
+                    targetPlayer.sendMessage(ChatColor.GREEN + "你收到了 " + petDataList.size() + " 宠物，来自 " + ChatColor.YELLOW + oldOwnerName);
                 }
             }
             case "batch_toggle_protection" -> {
@@ -469,8 +469,8 @@ public class PetGUIListener implements Listener {
                 boolean makeProtected = protectedCount < petDataList.size();
                 petDataList.forEach(pd -> pd.setProtectedFromPlayers(makeProtected));
                 petManager.saveAllPetData(petDataList);
-                player.sendMessage((makeProtected ? ChatColor.GREEN + "Enabled" : ChatColor.YELLOW + "Disabled")
-                        + ChatColor.GREEN + " Mutual Non-Aggression for " + petDataList.size() + " pets.");
+                player.sendMessage((makeProtected ? ChatColor.GREEN + "启用" : ChatColor.YELLOW + "禁用")
+                        + ChatColor.GREEN + "设置互不攻击模式于" + petDataList.size() + " 宠物。");
                 guiManager.openBatchManagementMenu(player, selectedPets);
             }
         }
@@ -485,7 +485,7 @@ public class PetGUIListener implements Listener {
                     if (petData.getMode() != newMode) {
                         petData.setMode(newMode);
                         petManager.updatePetData(petData);
-                        player.sendMessage(ChatColor.GREEN + "Set " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + "'s mode to " + ChatColor.YELLOW + newMode.name());
+                        player.sendMessage(ChatColor.GREEN + "设置" + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + "模式 " + ChatColor.YELLOW + newMode.name());
                         if (newMode != BehaviorMode.AGGRESSIVE && Bukkit.getEntity(petUUID) instanceof Creature c) {
                             c.setTarget(null);
                         }
@@ -498,7 +498,7 @@ public class PetGUIListener implements Listener {
             case "toggle_growth_pause" -> {
                 boolean paused = petData.isGrowthPaused();
                 plugin.getPetManager().setGrowthPaused(petUUID, !paused);
-                player.sendMessage(ChatColor.GREEN + (paused ? "Resumed" : "Paused") +
+                player.sendMessage(ChatColor.GREEN + (paused ? "恢复" : "暂停") +
                         " growth for " + petData.getDisplayName());
                 guiManager.openPetMenu(player, petUUID);
             }
@@ -506,14 +506,14 @@ public class PetGUIListener implements Listener {
                 Entity petEntity = Bukkit.getEntity(petUUID);
                 if (petEntity != null && petEntity.isValid()) {
                     petEntity.teleport(player.getLocation());
-                    player.sendMessage(ChatColor.GREEN + "Summoned " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + "!");
+                    player.sendMessage(ChatColor.GREEN + "召唤 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + "!");
                 } else {
-                    player.sendMessage(ChatColor.RED + "Could not find " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.RED + ". Is it loaded in the world?");
+				player.sendMessage(ChatColor.RED + "找不到 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.RED + ". 确定被加载于世界了吗？");
                 }
             }
             case "free_pet" -> {
                 petManager.freePetCompletely(petUUID);
-                player.sendMessage(ChatColor.YELLOW + "You have freed " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + ".");
+                player.sendMessage(ChatColor.YELLOW + "你放归了 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + ".");
                 guiManager.openMainMenu(player);
             }
             case "friendly_page" -> {
@@ -530,15 +530,15 @@ public class PetGUIListener implements Listener {
                         petEntity.setCustomName(null);
                     }
                     petManager.updatePetData(petData);
-                    player.sendMessage(ChatColor.YELLOW + "Reset name of " + ChatColor.AQUA + oldName + ChatColor.YELLOW + " to " + ChatColor.AQUA + newDefaultName + ChatColor.YELLOW + ".");
+                    player.sendMessage(ChatColor.YELLOW + "重设昵称 " + ChatColor.AQUA + oldName + ChatColor.YELLOW + " 为 " + ChatColor.AQUA + newDefaultName + ChatColor.YELLOW + ".");
                     guiManager.openPetMenu(player, petUUID);
                 } else {
                     awaitingRenameInput.put(player.getUniqueId(), petUUID);
                     player.closeInventory();
-                    player.sendMessage(ChatColor.GOLD + "Enter a new name for " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GOLD + " in chat.");
-                    player.sendMessage(ChatColor.GRAY + "Allowed characters: A-Z, a-z, 0-9, _, -");
-                    player.sendMessage(ChatColor.GRAY + "Using other characters will cancel the rename.");
-                    player.sendMessage(ChatColor.GRAY + "Type 'cancel' to abort.");
+                    player.sendMessage(ChatColor.GOLD + "输入一个新的昵称" + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GOLD + " 于聊天框。");
+                    player.sendMessage(ChatColor.GRAY + "允许的字符: A-Z, a-z, 0-9, _, -");
+                    player.sendMessage(ChatColor.GRAY + "使用其他字符将会取消修改。");
+                    player.sendMessage(ChatColor.GRAY + "键入 'cancel' 放弃这一步。");
                 }
             }
 
@@ -548,7 +548,7 @@ public class PetGUIListener implements Listener {
                 if (targetUUIDString != null) {
                     Player targetPlayer = Bukkit.getPlayer(UUID.fromString(targetUUIDString));
                     if (targetPlayer == null || !targetPlayer.isOnline()) {
-                        player.sendMessage(ChatColor.RED + "That player is no longer online!");
+                        player.sendMessage(ChatColor.RED + "该玩家已经离线！");
                         guiManager.openTransferMenu(player, petUUID);
                         return;
                     }
@@ -556,15 +556,15 @@ public class PetGUIListener implements Listener {
                     petData.setOwnerUUID(targetPlayer.getUniqueId());
                     petManager.updatePetData(petData);
                     if (Bukkit.getEntity(petUUID) instanceof Tameable t) t.setOwner(targetPlayer);
-                    player.sendMessage(ChatColor.GREEN + "You transferred " + ChatColor.AQUA + petData.getDisplayName() + " to " + ChatColor.YELLOW + targetPlayer.getName());
-                    targetPlayer.sendMessage(ChatColor.GREEN + "You received " + ChatColor.AQUA + petData.getDisplayName() + " from " + ChatColor.YELLOW + oldOwnerName);
+                    player.sendMessage(ChatColor.GREEN + "你赠予 " + ChatColor.AQUA + petData.getDisplayName() + " 给 " + ChatColor.YELLOW + targetPlayer.getName());
+                    targetPlayer.sendMessage(ChatColor.GREEN + "你收到了 " + ChatColor.AQUA + petData.getDisplayName() + " 于 " + ChatColor.YELLOW + oldOwnerName);
                     player.closeInventory();
                 }
             }
             case "toggle_sit" -> {
                 if (Bukkit.getEntity(petUUID) instanceof Sittable s) {
                     s.setSitting(!s.isSitting());
-                    player.sendMessage(ChatColor.GREEN + petData.getDisplayName() + " is now " + (s.isSitting() ? "sitting." : "standing."));
+                    player.sendMessage(ChatColor.GREEN + petData.getDisplayName() + " 现在是 " + (s.isSitting() ? "坐着的." : "站立的."));
                     guiManager.openPetMenu(player, petUUID);
                 }
             }
@@ -572,22 +572,22 @@ public class PetGUIListener implements Listener {
                 if (Bukkit.getEntity(petUUID) instanceof Creature c) {
                     c.setTarget(null);
                     if (c instanceof Wolf w) w.setAngry(false);
-                    player.sendMessage(ChatColor.GREEN + "Calmed " + ChatColor.AQUA + petData.getDisplayName() + ".");
+                    player.sendMessage(ChatColor.GREEN + "镇静了 " + ChatColor.AQUA + petData.getDisplayName() + ".");
                 } else {
-                    player.sendMessage(ChatColor.RED + "Could not find " + petData.getDisplayName() + " in the world.");
+                    player.sendMessage(ChatColor.RED + "找不到 " + petData.getDisplayName() + " 在这个世界。");
                 }
             }
             case "confirm_free" -> {
                 String petDisplayName = petData.getDisplayName();
                 petManager.freePetCompletely(petUUID);
-                player.sendMessage(ChatColor.YELLOW + "You have freed " + ChatColor.AQUA + petDisplayName + ".");
+                player.sendMessage(ChatColor.YELLOW + "你放归了 " + ChatColor.AQUA + petDisplayName + ".");
                 guiManager.openMainMenu(player);
             }
             case "add_friendly_prompt" -> {
                 awaitingFriendlyInput.put(player.getUniqueId(), petUUID);
                 player.closeInventory();
-                player.sendMessage(ChatColor.GOLD + "Please type the name of the player to add as friendly for " + ChatColor.AQUA + petData.getDisplayName() + ".");
-                player.sendMessage(ChatColor.GRAY + "(Type 'cancel' to abort)");
+                player.sendMessage(ChatColor.GOLD + "请输入要设为所有选定宠物友方的玩家名：" + ChatColor.AQUA + petData.getDisplayName() + ".");
+                player.sendMessage(ChatColor.GRAY + "(输入 'cancel' 放弃这一步。)");
             }
             case "remove_friendly" -> {
                 String targetFriendUUIDString = data.get(PetManagerGUI.TARGET_PLAYER_UUID_KEY, PersistentDataType.STRING);
@@ -595,7 +595,7 @@ public class PetGUIListener implements Listener {
                     UUID targetFriendUUID = UUID.fromString(targetFriendUUIDString);
                     petData.removeFriendlyPlayer(targetFriendUUID);
                     petManager.updatePetData(petData);
-                    player.sendMessage(ChatColor.GREEN + "Removed " + Bukkit.getOfflinePlayer(targetFriendUUID).getName() + " from " + petData.getDisplayName() + "'s friendly list.");
+				player.sendMessage(ChatColor.GREEN + "已移除 " + Bukkit.getOfflinePlayer(targetFriendUUID).getName() + " 于 " + petData.getDisplayName() + "的友好名单。");
                     guiManager.openFriendlyPlayerMenu(player, petUUID, 0);
                 }
             }
@@ -603,26 +603,26 @@ public class PetGUIListener implements Listener {
             case "confirm_remove_pet" -> openConfirmMenu(player, petUUID, false);
             case "do_revive_pet" -> {
                 if (!petData.isDead()) {
-                    player.sendMessage(ChatColor.RED + "This pet is not dead.");
+                    player.sendMessage(ChatColor.RED + "这只宠物没有死亡。");
                     guiManager.openPetMenu(player, petData.getPetUUID());
                     return;
                 }
                 ItemStack hand = player.getInventory().getItemInMainHand();
                 Material reviveItem = this.plugin.getConfigManager().getReviveItem();
                 if (hand.getType() != reviveItem) {
-                    player.sendMessage(ChatColor.RED + "You need a '" + reviveItem.name() + "' in your main hand to revive this pet.");
+                    player.sendMessage(ChatColor.RED + "你需要一个 '" + reviveItem.name() + "' 在你的主手复活这只宠物。");
                     guiManager.openPetMenu(player, petData.getPetUUID());
                     return;
                 }
                 hand.setAmount(hand.getAmount() - 1);
                 LivingEntity newPet = (LivingEntity) player.getWorld().spawnEntity(player.getLocation(), petData.getEntityType());
                 petManager.revivePet(petData, newPet);
-                player.sendMessage(ChatColor.GREEN + "You have revived " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + "!");
+                player.sendMessage(ChatColor.GREEN + "你已经复活了 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + "!");
                 guiManager.openPetMenu(player, newPet.getUniqueId());
             }
             case "do_remove_pet" -> {
                 petManager.freePetCompletely(petUUID);
-                player.sendMessage(ChatColor.YELLOW + "You have permanently deleted " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + ".");
+                player.sendMessage(ChatColor.YELLOW + "你永久删除了 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + ".");
                 guiManager.openMainMenu(player);
             }
             case "cancel_confirm" -> guiManager.openPetMenu(player, petUUID);
@@ -632,15 +632,15 @@ public class PetGUIListener implements Listener {
                 if (event.isShiftClick()) {
                     petData.setCustomIconMaterial(null);
                     petManager.updatePetData(petData);
-                    player.sendMessage(ChatColor.YELLOW + "Reset icon for " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + " to default.");
+                    player.sendMessage(ChatColor.YELLOW + "重设图标 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + " 为默认。");
                 } else {
                     ItemStack hand = player.getInventory().getItemInMainHand();
                     if (hand == null || hand.getType().isAir()) {
-                        player.sendMessage(ChatColor.RED + "Hold an item in your main hand to set as icon.");
+                        player.sendMessage(ChatColor.RED + "请将你要设为图标的物品拿在主手。");
                     } else {
                         petData.setCustomIconMaterial(hand.getType().name());
                         petManager.updatePetData(petData);
-                        player.sendMessage(ChatColor.GREEN + "Set icon for " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + " to " + ChatColor.YELLOW + hand.getType().name() + ChatColor.GREEN + ".");
+                        player.sendMessage(ChatColor.GREEN + "设置图标 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + " 为 " + ChatColor.YELLOW + hand.getType().name() + ChatColor.GREEN + ".");
                     }
                 }
                 
@@ -652,7 +652,7 @@ public class PetGUIListener implements Listener {
                 if (event.isShiftClick()) {
                     petData.setDisplayColor(null);
                     petManager.updatePetData(petData);
-                    player.sendMessage(ChatColor.YELLOW + "Reset color for " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + " to default.");
+                    player.sendMessage(ChatColor.YELLOW + "重设颜色 " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + " 为默认。");
                     
                     guiManager.openPetMenu(player, petUUID);
                 } else {
@@ -662,11 +662,11 @@ public class PetGUIListener implements Listener {
             case "choose_color" -> {
                 String colorName = data.get(PetManagerGUI.COLOR_KEY, PersistentDataType.STRING);
                 if (colorName == null || colorName.isEmpty()) {
-                    player.sendMessage(ChatColor.RED + "Invalid color selection.");
+                    player.sendMessage(ChatColor.RED + "无效的颜色选择。");
                 } else {
                     petData.setDisplayColor(colorName);
                     petManager.updatePetData(petData);
-                    player.sendMessage(ChatColor.GREEN + "Set color for " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + " to " + ChatColor.YELLOW + colorName + ChatColor.GREEN + ".");
+                    player.sendMessage(ChatColor.GREEN + "设置颜色" + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + " 为 " + ChatColor.YELLOW + colorName + ChatColor.GREEN + ".");
                 }
                 guiManager.openPetMenu(player, petUUID);
             }
@@ -676,9 +676,9 @@ public class PetGUIListener implements Listener {
                 petData.setProtectedFromPlayers(nowProtected);
                 petManager.updatePetData(petData);
                 if (nowProtected) {
-                    player.sendMessage(ChatColor.GREEN + "Enabled Mutual Non-Aggression for " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + ".");
+                    player.sendMessage(ChatColor.GREEN + "启用互不攻击模式" + ChatColor.AQUA + petData.getDisplayName() + ChatColor.GREEN + ".");
                 } else {
-                    player.sendMessage(ChatColor.YELLOW + "Disabled Mutual Non-Aggression for " + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + ".");
+                    player.sendMessage(ChatColor.YELLOW + "禁用互不攻击模式" + ChatColor.AQUA + petData.getDisplayName() + ChatColor.YELLOW + ".");
                 }
                 guiManager.openPetMenu(player, petUUID);
             }

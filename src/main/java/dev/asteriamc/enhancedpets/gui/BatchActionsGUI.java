@@ -54,11 +54,11 @@ public class BatchActionsGUI {
         if (petTypes.isEmpty()) invSize = 27;
         invSize = Math.min(54, invSize);
 
-        Inventory gui = Bukkit.createInventory(player, invSize, ChatColor.DARK_AQUA + "Batch Actions: Select Type");
+        Inventory gui = Bukkit.createInventory(player, invSize, ChatColor.DARK_AQUA + "批量操作：选择类型");
 
         if (petTypes.isEmpty()) {
-            gui.setItem(13, mainGui.createItem(Material.BARRIER, ChatColor.RED + "No Pet Types Found",
-                    Collections.singletonList(ChatColor.GRAY + "You don't have any pets to manage in batch.")));
+            gui.setItem(13, mainGui.createItem(Material.BARRIER, ChatColor.RED + "未发现宠物类型",
+                    Collections.singletonList(ChatColor.GRAY + "你没有任何宠物需要批量管理。")));
         } else {
             for (int i = 0; i < petTypes.size(); i++) {
                 EntityType type = petTypes.get(i);
@@ -68,7 +68,7 @@ public class BatchActionsGUI {
             }
         }
 
-        gui.setItem(invSize - 1, mainGui.createActionButton(Material.ARROW, ChatColor.YELLOW + "Back to Main Menu", "back_to_main", null, null));
+        gui.setItem(invSize - 1, mainGui.createActionButton(Material.ARROW, ChatColor.YELLOW + "返回主菜单", "back_to_main", null, null));
         player.openInventory(gui);
     }
 
@@ -102,7 +102,7 @@ public class BatchActionsGUI {
         int totalPages = Math.max(1, (int) Math.ceil((double) petsOfType.size() / petsPerPage));
         page = Math.max(0, Math.min(page, totalPages - 1));
 
-        Inventory gui = Bukkit.createInventory(player, 54, ChatColor.DARK_AQUA + "Select " + petType.name() + "s");
+        Inventory gui = Bukkit.createInventory(player, 54, ChatColor.DARK_AQUA + "选择 " + petType.name() + "s");
 
         int startIndex = page * petsPerPage;
         for (int i = 0; i < petsPerPage; i++) {
@@ -115,26 +115,26 @@ public class BatchActionsGUI {
         }
 
 
-        gui.setItem(45, createNavButton(Material.OAK_DOOR, ChatColor.YELLOW + "Back to Type Selection", "open_type_select", petType, -1));
+        gui.setItem(45, createNavButton(Material.OAK_DOOR, ChatColor.YELLOW + "返回类型选择", "open_type_select", petType, -1));
 
         if (page > 0) {
-            gui.setItem(46, createNavButton(Material.ARROW, ChatColor.GREEN + "Previous Page", "batch_select_page", petType, page - 1));
+            gui.setItem(46, createNavButton(Material.ARROW, ChatColor.GREEN + "上一页", "batch_select_page", petType, page - 1));
         }
 
-        gui.setItem(48, createSelectionButton(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Select None", "select_none", petType));
-        gui.setItem(50, createSelectionButton(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "Select All", "select_all", petType));
+        gui.setItem(48, createSelectionButton(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "取消选择", "select_none", petType));
+        gui.setItem(50, createSelectionButton(Material.LIME_STAINED_GLASS_PANE, ChatColor.GREEN + "全选", "select_all", petType));
 
         if (petsOfType.stream().anyMatch(PetData::isDead)) {
-            gui.setItem(51, createSelectionButton(Material.SKELETON_SKULL, ChatColor.DARK_RED + "Remove All Dead Pets", "batch_remove_dead", petType));
+            gui.setItem(51, createSelectionButton(Material.SKELETON_SKULL, ChatColor.DARK_RED + "移除全部死亡宠物", "batch_remove_dead", petType));
         }
         if ((page + 1) < totalPages) {
-            gui.setItem(52, createNavButton(Material.ARROW, ChatColor.GREEN + "Next Page", "batch_select_page", petType, page + 1));
+            gui.setItem(52, createNavButton(Material.ARROW, ChatColor.GREEN + "下一页", "batch_select_page", petType, page + 1));
         }
 
         ItemStack nextStepButton = new ItemStack(Material.GREEN_WOOL);
         ItemMeta nextMeta = nextStepButton.getItemMeta();
-        nextMeta.setDisplayName(ChatColor.GREEN + "Next Step ->");
-        nextMeta.setLore(Arrays.asList(ChatColor.GRAY + "Manage " + selectedPets.size() + " selected pet(s).", "", selectedPets.isEmpty() ? ChatColor.RED + "Select at least one pet!" : ChatColor.GREEN + "Click to proceed."));
+        nextMeta.setDisplayName(ChatColor.GREEN + "下一步 ->");
+        nextMeta.setLore(Arrays.asList(ChatColor.GRAY + "管理 " + selectedPets.size() + " selected pet(s).", "", selectedPets.isEmpty() ? ChatColor.RED + "至少选择一只宠物!" : ChatColor.GREEN + "点击继续。"));
         nextMeta.getPersistentDataContainer().set(BATCH_ACTION_KEY, PersistentDataType.STRING, "open_batch_manage");
         nextStepButton.setItemMeta(nextMeta);
         gui.setItem(53, nextStepButton);
@@ -153,9 +153,9 @@ public class BatchActionsGUI {
         if (meta != null) {
             meta.setDisplayName(ChatColor.YELLOW + formatEntityType(type));
             meta.setLore(Arrays.asList(
-                    ChatColor.GRAY + "You have " + count + " of this pet type.",
+                    ChatColor.GRAY + "你有 " + count + " 只该类型宠物.",
                     "",
-                    ChatColor.GREEN + "Click to select which ones to manage."
+                    ChatColor.GREEN + "单击以选择要管理的对象。"
             ));
             meta.getPersistentDataContainer().set(BATCH_ACTION_KEY, PersistentDataType.STRING, "select_pet_type");
             meta.getPersistentDataContainer().set(PET_TYPE_KEY, PersistentDataType.STRING, type.name());
@@ -174,9 +174,9 @@ public class BatchActionsGUI {
             meta.setDisplayName(displayName);
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Status: " + (isSelected ? ChatColor.GREEN + "Selected" : ChatColor.RED + "Not Selected"));
+            lore.add(ChatColor.GRAY + "状态: " + (isSelected ? ChatColor.GREEN + "已选择" : ChatColor.RED + "未选择"));
             lore.add("");
-            lore.add(ChatColor.YELLOW + "Click to toggle selection.");
+            lore.add(ChatColor.YELLOW + "点击以切换选择操作。");
             meta.setLore(lore);
 
 

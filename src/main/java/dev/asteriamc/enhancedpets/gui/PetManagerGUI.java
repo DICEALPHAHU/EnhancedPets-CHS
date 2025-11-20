@@ -306,7 +306,7 @@ public class PetManagerGUI {
 
         gui.setItem(11, this.createActionButton(
                 Material.LIME_WOOL,
-                ChatColor.GREEN + "Cancel",
+                ChatColor.GREEN + "取消",
                 "open_batch_manage",
                 null,
                 Collections.singletonList(ChatColor.GRAY + "保留你的宠物")
@@ -327,7 +327,7 @@ public class PetManagerGUI {
     }
 
     public void openBatchFriendlyPlayerMenu(Player player, Set<UUID> selectedPetUUIDs, int page) {
-	String title = ChatColor.DARK_AQUA + "批量选择友好态度: " + selectedPetUUIDs.size() + " 宠物";
+	String title = ChatColor.DARK_AQUA + "批量选择转化为友好态度: " + selectedPetUUIDs.size() + " 宠物";
         Inventory gui = Bukkit.createInventory(player, 54, title);
 
         List<PetData> pets = selectedPetUUIDs.stream().map(petManager::getPetData).filter(Objects::nonNull).toList();
@@ -451,11 +451,11 @@ public class PetManagerGUI {
         if (petEntity instanceof LivingEntity livingEntity && petEntity.isValid()) {
             double health = livingEntity.getHealth();
             double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-		headerLore.add(ChatColor.RED + "生命: " + ChatColor.WHITE + String.format("%.1f", health) + " / " + String.format("%.1f", maxHealth));
+		headerLore.add(ChatColor.RED + "生命值: " + ChatColor.WHITE + String.format("%.1f", health) + " / " + String.format("%.1f", maxHealth));
         } else {
-		headerLore.add(ChatColor.GRAY + "生命: 未知 (未加载)");
+		headerLore.add(ChatColor.GRAY + "生命值: 未知 (未加载)");
         }
-        headerLore.add(ChatColor.GRAY + "Protection: " + (protectionEnabled ? ChatColor.GREEN + "启用" : ChatColor.RED + "禁用"));
+        headerLore.add(ChatColor.GRAY + "保护: " + (protectionEnabled ? ChatColor.GREEN + "启用" : ChatColor.RED + "禁用"));
         int friendlyCount = petData.getFriendlyPlayers().size();
         if (friendlyCount > 0) {
 		headerLore.add("" + ChatColor.GREEN + friendlyCount + " 友好玩家" + (friendlyCount == 1 ? "" : "s"));
@@ -525,7 +525,7 @@ public class PetManagerGUI {
 
         gui.setItem(24, this.createActionButton(
                 Material.MILK_BUCKET,
-                ChatColor.AQUA + "镇静宠物",
+                ChatColor.AQUA + "安抚宠物",
                 "calm_pet",
                 petData.getPetUUID(),
                 Arrays.asList(
@@ -677,7 +677,7 @@ public class PetManagerGUI {
         if (eligiblePlayers.isEmpty()) {
             gui.setItem(invSize == 27 ? 13 : 22, this.createItem(
                     Material.BARRIER,
-                    ChatColor.RED + "No Players Online",
+                    ChatColor.RED + "没有玩家在线",
                     Collections.singletonList(ChatColor.GRAY + "没有可赠予的玩家!")
             ));
         } else {
@@ -861,7 +861,7 @@ public class PetManagerGUI {
 
         ItemStack cancel = new ItemStack(Material.LIME_WOOL);
         ItemMeta cancelMeta = cancel.getItemMeta();
-        cancelMeta.setDisplayName(ChatColor.GREEN + "Cancel");
+        cancelMeta.setDisplayName(ChatColor.GREEN + "取消");
         cancelMeta.setLore(Collections.singletonList(ChatColor.GRAY + "保留宠物记录."));
         cancelMeta.getPersistentDataContainer().set(BatchActionsGUI.BATCH_ACTION_KEY, PersistentDataType.STRING, "open_pet_select");
         cancelMeta.getPersistentDataContainer().set(BatchActionsGUI.PET_TYPE_KEY, PersistentDataType.STRING, petType.name());
@@ -909,9 +909,9 @@ public class PetManagerGUI {
         if (petEntity instanceof LivingEntity livingEntity && petEntity.isValid()) {
             double health = livingEntity.getHealth();
             double maxHealth = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-            lore.add(ChatColor.RED + "生命: " + ChatColor.WHITE + String.format("%.1f", health) + " / " + String.format("%.1f", maxHealth));
+            lore.add(ChatColor.RED + "生命值: " + ChatColor.WHITE + String.format("%.1f", health) + " / " + String.format("%.1f", maxHealth));
         } else {
-            lore.add(ChatColor.GRAY + "生命: 未知 (未加载)");
+            lore.add(ChatColor.GRAY + "生命值: 未知 (未加载)");
         }
 
         lore.add(ChatColor.GRAY + "保护: " + (petData.isProtectedFromPlayers() ? ChatColor.GREEN + "已启用" : ChatColor.RED + "未启用"));
@@ -1075,7 +1075,7 @@ public class PetManagerGUI {
         gui.setItem(4, createItem(
                 getDisplayMaterialForPet(petData),
                 getNameColor(petData) + petData.getDisplayName(),
-                Collections.singletonList(ChatColor.GRAY + "选择以上的选项.")
+                Collections.singletonList(ChatColor.GRAY + "选择以上的选项。")
         ));
 
         
@@ -1087,7 +1087,7 @@ public class PetManagerGUI {
                 Arrays.asList(
 				        ChatColor.GRAY + "左键：使用你手上的物品",
                         ChatColor.GRAY + "作为这只宠物的图标",
-                        ChatColor.GRAY + "Shift+点击: 重设为默认."
+                        ChatColor.GRAY + "Shift+点击: 重设为默认。"
                 )
         ));
 
@@ -1099,7 +1099,7 @@ public class PetManagerGUI {
                 petUUID,
                 Arrays.asList(
                         ChatColor.GRAY + "左键：选择一个颜色",
-                        ChatColor.GRAY + "Shift+点击: 重设为默认名字."
+                        ChatColor.GRAY + "Shift+点击: 重设为默认名字。"
                 )
         ));
 
@@ -1110,3 +1110,4 @@ public class PetManagerGUI {
     }
 
 }
+

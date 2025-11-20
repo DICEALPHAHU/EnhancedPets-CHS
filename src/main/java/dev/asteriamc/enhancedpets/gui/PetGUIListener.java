@@ -53,10 +53,10 @@ public class PetGUIListener implements Listener {
 
         String title = event.getView().getTitle();
         boolean isPetGui = title.startsWith(ChatColor.DARK_AQUA.toString())
-                || title.startsWith(ChatColor.DARK_RED + "Confirm Free:")
-                || title.startsWith(ChatColor.GREEN + "Confirm Revival")
-                || title.startsWith(ChatColor.DARK_RED + "Confirm Remove:")
-                || title.startsWith(ChatColor.RED + "Confirm Removal");
+                || title.startsWith(ChatColor.DARK_RED + "确认放归:")
+                || title.startsWith(ChatColor.GREEN + "确认复活")
+                || title.startsWith(ChatColor.DARK_RED + "确认移除:")
+                || title.startsWith(ChatColor.RED + "确认移出");
 
         if (!isPetGui) return;
 
@@ -401,7 +401,7 @@ public class PetGUIListener implements Listener {
                             ((Creature) e).setTarget(null);
                             if (e instanceof Wolf w) w.setAngry(false);
                         }).count();
-                player.sendMessage(ChatColor.GREEN + "镇静 " + calmed + " 宠物.");
+                player.sendMessage(ChatColor.GREEN + "安抚 " + calmed + " 宠物.");
             }
             case "batch_toggle_sit" -> {
                 List<Sittable> sittables = selectedPets.stream().map(Bukkit::getEntity).filter(e -> e instanceof Sittable).map(e -> (Sittable) e).toList();
@@ -564,7 +564,7 @@ public class PetGUIListener implements Listener {
             case "toggle_sit" -> {
                 if (Bukkit.getEntity(petUUID) instanceof Sittable s) {
                     s.setSitting(!s.isSitting());
-                    player.sendMessage(ChatColor.GREEN + petData.getDisplayName() + " 现在是 " + (s.isSitting() ? "坐着的." : "站立的."));
+                    player.sendMessage(ChatColor.GREEN + petData.getDisplayName() + " 现在是 " + (s.isSitting() ? "坐着的。" : "站立的。"));
                     guiManager.openPetMenu(player, petUUID);
                 }
             }
@@ -572,7 +572,7 @@ public class PetGUIListener implements Listener {
                 if (Bukkit.getEntity(petUUID) instanceof Creature c) {
                     c.setTarget(null);
                     if (c instanceof Wolf w) w.setAngry(false);
-                    player.sendMessage(ChatColor.GREEN + "镇静了 " + ChatColor.AQUA + petData.getDisplayName() + ".");
+                    player.sendMessage(ChatColor.GREEN + "安抚了 " + ChatColor.AQUA + petData.getDisplayName() + ".");
                 } else {
                     player.sendMessage(ChatColor.RED + "找不到 " + petData.getDisplayName() + " 在这个世界。");
                 }
@@ -610,7 +610,7 @@ public class PetGUIListener implements Listener {
                 ItemStack hand = player.getInventory().getItemInMainHand();
                 Material reviveItem = this.plugin.getConfigManager().getReviveItem();
                 if (hand.getType() != reviveItem) {
-                    player.sendMessage(ChatColor.RED + "你需要一个 '" + reviveItem.name() + "' 在你的主手复活这只宠物。");
+                    player.sendMessage(ChatColor.RED + "你需要一个 '" + reviveItem.name() + "' 在你的主手以复活这只宠物。");
                     guiManager.openPetMenu(player, petData.getPetUUID());
                     return;
                 }
@@ -686,17 +686,17 @@ public class PetGUIListener implements Listener {
     }
 
     private void openConfirmMenu(Player player, UUID petUUID, boolean isRevive) {
-        Inventory gui = Bukkit.createInventory(player, 27, (isRevive ? ChatColor.GREEN + "Confirm Revival" : ChatColor.RED + "Confirm Removal"));
+        Inventory gui = Bukkit.createInventory(player, 27, (isRevive ? ChatColor.GREEN + "确认复活" : ChatColor.RED + "确认移出"));
         ItemStack confirm = new ItemStack(isRevive ? this.plugin.getConfigManager().getReviveItem() : Material.BARRIER);
         ItemMeta meta = confirm.getItemMeta();
-        meta.setDisplayName(isRevive ? ChatColor.GREEN + "Confirm Revival" : ChatColor.RED + "Confirm Removal");
+        meta.setDisplayName(isRevive ? ChatColor.GREEN + "确认复活" : ChatColor.RED + "确认移出");
         meta.getPersistentDataContainer().set(PetManagerGUI.ACTION_KEY, PersistentDataType.STRING, isRevive ? "do_revive_pet" : "do_remove_pet");
         meta.getPersistentDataContainer().set(PetManagerGUI.PET_UUID_KEY, PersistentDataType.STRING, petUUID.toString());
         confirm.setItemMeta(meta);
         gui.setItem(11, confirm);
         ItemStack cancel = new ItemStack(Material.ARROW);
         ItemMeta cancelMeta = cancel.getItemMeta();
-        cancelMeta.setDisplayName(ChatColor.YELLOW + "Cancel");
+        cancelMeta.setDisplayName(ChatColor.YELLOW + "取消");
         cancelMeta.getPersistentDataContainer().set(PetManagerGUI.ACTION_KEY, PersistentDataType.STRING, "cancel_confirm");
         cancelMeta.getPersistentDataContainer().set(PetManagerGUI.PET_UUID_KEY, PersistentDataType.STRING, petUUID.toString());
         cancel.setItemMeta(cancelMeta);
@@ -704,3 +704,4 @@ public class PetGUIListener implements Listener {
         player.openInventory(gui);
     }
 }
+

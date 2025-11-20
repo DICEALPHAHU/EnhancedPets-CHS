@@ -21,9 +21,9 @@ public class PetManagerGUI {
     public static final NamespacedKey PET_UUID_KEY = new NamespacedKey(Enhancedpets.getInstance(), "pet_uuid");
     public static final NamespacedKey ACTION_KEY = new NamespacedKey(Enhancedpets.getInstance(), "gui_action");
     public static final NamespacedKey TARGET_PLAYER_UUID_KEY = new NamespacedKey(Enhancedpets.getInstance(), "target_player_uuid");
-    public static final String MAIN_MENU_TITLE = ChatColor.DARK_AQUA + "Your Enhanced Pets";
-    public static final String PET_MENU_TITLE_PREFIX = ChatColor.DARK_AQUA + "Manage Pet: ";
-    public static final String FRIENDLY_MENU_TITLE_PREFIX = ChatColor.DARK_AQUA + "Friendly Players: ";
+    public static final String MAIN_MENU_TITLE = ChatColor.DARK_AQUA + "您的增强宠物界面";
+    public static final String PET_MENU_TITLE_PREFIX = ChatColor.DARK_AQUA + "管理宠物: ";
+    public static final String FRIENDLY_MENU_TITLE_PREFIX = ChatColor.DARK_AQUA + "友好玩家: ";
     public static final NamespacedKey PAGE_KEY = new NamespacedKey(Enhancedpets.getInstance(), "gui_page");
     
     public static final NamespacedKey COLOR_KEY = new NamespacedKey(Enhancedpets.getInstance(), "display_color");
@@ -1110,4 +1110,5 @@ public class PetManagerGUI {
     }
 
 }
+
 

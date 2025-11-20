@@ -307,12 +307,12 @@ public class PetListener implements Listener {
                 if (Math.random() < 0.2) {
                     String defaultName = petManager.assignNewDefaultName(target.getType());
                     petManager.registerNonTameablePet(target, player.getUniqueId(), defaultName);
-                    player.sendMessage(ChatColor.GREEN + "You have tamed this Happy Ghast! It is now your pet.");
+                    player.sendMessage(ChatColor.GREEN + "你驯服了这只快乐恶魂，现在它是你的了。");
                 } else {
-                    player.sendMessage(ChatColor.YELLOW + "The Happy Ghast resisted your taming attempt. Try again!");
+                    player.sendMessage(ChatColor.YELLOW + "这只快乐恶魂挣脱了你的驯服，再次尝试!");
                 }
             } else {
-                player.sendMessage(ChatColor.YELLOW + "This Happy Ghast is already registered as a pet.");
+                player.sendMessage(ChatColor.YELLOW + "这只快乐恶魂已经标记为宠物。");
             }
             return;
         }
@@ -420,5 +420,6 @@ public class PetListener implements Listener {
             return System.currentTimeMillis() > expiry;
         }
     }
+
 
 }

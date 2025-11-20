@@ -23,20 +23,20 @@ public class PetCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (command.getName().equalsIgnoreCase("petadmin")) {
             if (!(sender instanceof Player player)) {
-                sender.sendMessage(ChatColor.RED + "Only players can use this command.");
+                sender.sendMessage(ChatColor.RED + "只有玩家可以执行这个命令。");
                 return true;
             }
             if (!player.hasPermission("enhancedpets.admin")) {
-                player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                player.sendMessage(ChatColor.RED + "您没有权限执行此命令");
                 return true;
             }
             if (args.length != 1) {
-                player.sendMessage(ChatColor.RED + "Usage: /" + label + " <player>");
+                player.sendMessage(ChatColor.RED + "用法: /" + label + " <玩家名>");
                 return true;
             }
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
             if (!target.isOnline() && !target.hasPlayedBefore()) {
-                player.sendMessage(ChatColor.RED + "Player '" + ChatColor.YELLOW + args[0] + ChatColor.RED + "' does not exist.");
+                player.sendMessage(ChatColor.RED + "玩家 '" + ChatColor.YELLOW + args[0] + ChatColor.RED + "' 不存在。");
                 return true;
             }
             
@@ -50,7 +50,7 @@ public class PetCommand implements CommandExecutor {
 
         if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("enhancedpets.reload")) {
-                sender.sendMessage(ChatColor.RED + "You do not have permission to reload this plugin.");
+                sender.sendMessage(ChatColor.RED + "你没有权限重新加载这个插件。");
                 return true;
             } else {
                 this.plugin.reloadPluginConfig(sender);
@@ -59,7 +59,7 @@ public class PetCommand implements CommandExecutor {
         } else if (args.length == 0) {
             if (sender instanceof Player player) {
                 if (!player.hasPermission("enhancedpets.use")) {
-                    player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                    player.sendMessage(ChatColor.RED + "你没有权限使用这个命令。");
                     return true;
                 } else {
                     this.guiManager.clearViewerOwnerOverride(player.getUniqueId());
@@ -67,12 +67,13 @@ public class PetCommand implements CommandExecutor {
                     return true;
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "The pet GUI can only be opened by a player. Use '/" + label + " reload' to reload.");
+                sender.sendMessage(ChatColor.RED + "宠物GUI节目仅限于玩家开启. 使用 '/" + label + " reload' 重新加载。");
                 return true;
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "Invalid usage. Use '/" + label + "' to open the GUI or '/" + label + " reload' to reload the config.");
+            sender.sendMessage(ChatColor.RED + "无效用法。使用 '/" + label + "' 来打开GUI菜单或 '/" + label + " reload' 重新加载配置文件。");
             return true;
         }
     }
 }
+

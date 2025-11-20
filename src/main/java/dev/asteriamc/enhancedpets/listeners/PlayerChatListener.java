@@ -68,7 +68,7 @@ public class PlayerChatListener implements Listener {
 
     private void handleRenameInput(Player player, String input, UUID petContextUUID) {
         if (input.equalsIgnoreCase("cancel")) {
-            player.sendMessage(ChatColor.YELLOW + "Cancelled pet rename.");
+            player.sendMessage(ChatColor.YELLOW + "取消宠物重命名。");
             this.plugin.getServer().getScheduler().runTask(this.plugin, () -> this.guiManager.openPetMenu(player, petContextUUID));
             return;
         }
@@ -76,7 +76,7 @@ public class PlayerChatListener implements Listener {
         this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
             PetData petData = this.petManager.getPetData(petContextUUID);
             if (petData == null) {
-                player.sendMessage(ChatColor.RED + "Error: Pet does not exist anymore.");
+                player.sendMessage(ChatColor.RED + "错误：宠物已不存在。");
                 this.guiManager.openMainMenu(player);
                 return;
             }
@@ -91,7 +91,7 @@ public class PlayerChatListener implements Listener {
                 this.petManager.updatePetData(petData);
                 player.sendMessage(ChatColor.GREEN + "Renamed " + ChatColor.AQUA + oldName + ChatColor.GREEN + " to " + ChatColor.AQUA + input + ChatColor.GREEN + ".");
             } else {
-                player.sendMessage(ChatColor.RED + "Invalid name characters used. Name was not changed.");
+                player.sendMessage(ChatColor.RED + "使用了无效的名称字符。昵称未变化。");
             }
             this.guiManager.openPetMenu(player, petContextUUID);
         });
@@ -99,7 +99,7 @@ public class PlayerChatListener implements Listener {
 
     private void handleSingleFriendlyInput(Player player, String input, UUID petContextUUID) {
         if (input.equalsIgnoreCase("cancel")) {
-            player.sendMessage(ChatColor.YELLOW + "Cancelled adding friendly player.");
+            player.sendMessage(ChatColor.YELLOW + "取消添加友好玩家。");
 
             this.plugin.getServer().getScheduler().runTask(this.plugin, () -> this.guiManager.openFriendlyPlayerMenu(player, petContextUUID, 0));
             return;
@@ -108,7 +108,7 @@ public class PlayerChatListener implements Listener {
         this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
             PetData petData = this.petManager.getPetData(petContextUUID);
             if (petData == null) {
-                player.sendMessage(ChatColor.RED + "Error: Pet data lost while waiting for input.");
+                player.sendMessage(ChatColor.RED + "错误：宠物数据在等待输入时丢失。");
                 this.guiManager.openMainMenu(player);
                 return;
             }
@@ -117,20 +117,20 @@ public class PlayerChatListener implements Listener {
             if (!targetPlayer.hasPlayedBefore() && !targetPlayer.isOnline()) {
                 player.sendMessage(ChatColor.RED + "Player '" + ChatColor.YELLOW + input + ChatColor.RED + "' not found.");
                 this.guiListener.getAwaitingFriendlyInputMap().put(player.getUniqueId(), petContextUUID);
-                player.sendMessage(ChatColor.GOLD + "Please try again, or type 'cancel'.");
+                player.sendMessage(ChatColor.GOLD + "请重试，或者键入 'cancel'.");
                 return;
             }
 
             UUID targetUUID = targetPlayer.getUniqueId();
             String targetName = targetPlayer.getName() != null ? targetPlayer.getName() : input;
             if (targetUUID.equals(petData.getOwnerUUID())) {
-                player.sendMessage(ChatColor.YELLOW + "The owner is always friendly towards their pet.");
+                player.sendMessage(ChatColor.YELLOW + "主人对他们的宠物总是很友好。");
             } else if (petData.isFriendlyPlayer(targetUUID)) {
-                player.sendMessage(ChatColor.YELLOW + targetName + " is already on the friendly list.");
+                player.sendMessage(ChatColor.YELLOW + targetName + " 已经加入到友好名单。");
             } else {
                 petData.addFriendlyPlayer(targetUUID);
                 this.petManager.updatePetData(petData);
-                player.sendMessage(ChatColor.GREEN + "Added " + ChatColor.YELLOW + targetName + ChatColor.GREEN + " to " + ChatColor.AQUA + petData.getDisplayName() + "'s friendly list.");
+                player.sendMessage(ChatColor.GREEN + "已添加 " + ChatColor.YELLOW + targetName + ChatColor.GREEN + " to " + ChatColor.AQUA + petData.getDisplayName() + " 的友好名单");
             }
 
             this.guiManager.openFriendlyPlayerMenu(player, petContextUUID, 0);
@@ -140,12 +140,12 @@ public class PlayerChatListener implements Listener {
     private void handleBatchFriendlyInput(Player player, String input) {
         Set<UUID> selectedPets = this.guiManager.getBatchActionsGUI().getPlayerSelections().get(player.getUniqueId());
         if (selectedPets == null || selectedPets.isEmpty()) {
-            player.sendMessage(ChatColor.RED + "Error: Pet selection lost.");
+            player.sendMessage(ChatColor.RED + "错误：宠物选择已取消。");
             return;
         }
 
         if (input.equalsIgnoreCase("cancel")) {
-            player.sendMessage(ChatColor.YELLOW + "Cancelled adding friendly player.");
+            player.sendMessage(ChatColor.YELLOW + "取消添加友好玩家。");
             this.plugin.getServer().getScheduler().runTask(this.plugin, () -> this.guiManager.openBatchFriendlyPlayerMenu(player, selectedPets, 0));
             return;
         }
@@ -153,9 +153,9 @@ public class PlayerChatListener implements Listener {
         this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
             OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(input);
             if (!targetPlayer.hasPlayedBefore() && !targetPlayer.isOnline()) {
-                player.sendMessage(ChatColor.RED + "Player '" + ChatColor.YELLOW + input + ChatColor.RED + "' not found.");
+                player.sendMessage(ChatColor.RED + "玩家的 " + ChatColor.YELLOW + input + ChatColor.RED + " 没有找到");
                 this.guiListener.getAwaitingBatchFriendlyInputMap().put(player.getUniqueId(), true);
-                player.sendMessage(ChatColor.GOLD + "Please try again, or type 'cancel'.");
+                player.sendMessage(ChatColor.GOLD + "请重试，或者键入 'cancel'.");
                 return;
             }
 
@@ -174,9 +174,10 @@ public class PlayerChatListener implements Listener {
                     .filter(java.util.Objects::nonNull)
                     .collect(java.util.stream.Collectors.toList());
             this.petManager.saveAllPetData(toSave);
-            player.sendMessage(ChatColor.GREEN + "Added " + ChatColor.YELLOW + targetName + ChatColor.GREEN + " to " + addCount + " pets' friendly lists.");
+            player.sendMessage(ChatColor.GREEN + "已添加 " + ChatColor.YELLOW + targetName + ChatColor.GREEN + " 到 " + addCount + " 宠物的友好名单。");
             this.guiManager.openBatchFriendlyPlayerMenu(player, selectedPets, 0);
         });
     }
 }
+
 

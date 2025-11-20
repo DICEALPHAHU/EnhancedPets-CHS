@@ -5,6 +5,8 @@
 ![Java](https://img.shields.io/badge/Java-17%2B-RED)
 ![Discord Support](https://img.shields.io/discord/b7BVkJ56mR?label=Discord&logo=discord&color=7289DA)
 
+### 由于原作者只允许Fork项目，并没有提供相应License，故本项目不提供Release，自行构建本项目代码仓库而产生的插件与本项目无关.
+### Since the original author only allowed forking the project and did not provide the corresponding License, this project does not offer a Release. This project is not responsible for any legal impact caused by the plugins generated from the self-built code repository of this project.
 > 无需复杂操作即可提升原版宠物体验！
 > 更智能、更友好、更易管理的狼、猫、鹦鹉等宠物。
 
@@ -193,5 +195,6 @@ debug: false
 
 
 给生活增添宠物管理 — 比原版更可靠.
+
 
 
